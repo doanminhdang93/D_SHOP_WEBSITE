@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import "./App.css"
-import {LoginPage,SignUpPage,ActivationPage} from "./Routes.js"
+import {LoginPage,SignUpPage,ActivationPage,HomePage} from "./Routes.js"
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Store from './redux/store';
@@ -14,6 +14,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="/login" element={<LoginPage></LoginPage>}></Route>
         <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
         <Route path="/activation/:activation_token" element={<ActivationPage></ActivationPage>}></Route>
