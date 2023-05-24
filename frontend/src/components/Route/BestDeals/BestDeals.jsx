@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { productData } from '../../../static/data';
 import styles from '../../../styles/styles';
-import ProductCart from '../ProductCart/ProductCart.jsx';
+import ProductCart from '../ProductCard/ProductCard.jsx';
 
 const BestDeals = () => {
     const [data,setData] = useState([]);
@@ -17,7 +17,7 @@ const BestDeals = () => {
                 <div className={`${styles.heading}`}>
                     <h1>Khuyến mại</h1>
                 </div>
-                <div className="grid grid-cols-1 gap-[5px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[20px] xl:grid-cols-5 xl:gap-[30px]">
+                <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12 border-0">
                     {
                         data && data.map((i,index) =>(
                             <ProductCart data={i} key={index}></ProductCart>

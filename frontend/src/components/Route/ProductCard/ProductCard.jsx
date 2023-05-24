@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from 'react-icons/ai';
+import ProductDetailsCard from '../ProductDetailsCard/ProductDetailsCard.jsx';
 
-const ProductCart = ({data}) => {
+const ProductCard = ({data}) => {
     const [click, setClick] = useState(false);
     const [open,setOpen] = useState(false);
 
@@ -111,9 +112,15 @@ const ProductCart = ({data}) => {
                         color="#444"
                         title='Thêm vào giỏ hàng'
                     ></AiOutlineShoppingCart>
+
+                    {
+                        open ? (
+                            <ProductDetailsCard setOpen={setOpen} data={data}></ProductDetailsCard>                            
+                        ) : null
+                    }
                 </div>  
             </div>
         </>
     );
 }
-export default ProductCart;
+export default ProductCard;

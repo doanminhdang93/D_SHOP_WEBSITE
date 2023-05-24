@@ -32,7 +32,7 @@ const Categories = () => {
                 {
                     categoriesData && categoriesData.map((i) => {
                         const handleSubmit = (i) => {
-                            navigate(`/products?category=${i.title}`);
+                            navigate(`/products?category=${i.subTitle}`);
                         }
                         return (
                             <div className="w-full h-[100px] flex items-center justify-between cursor-pointer overflow-hidden" 
