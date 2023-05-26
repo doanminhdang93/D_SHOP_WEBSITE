@@ -8,8 +8,8 @@ const NavBar = ({active}) => {
     <div className={`${styles.noramFlex}`}>
         {
             navItems && navItems.map((i,index) => (
-                <div className='flex'>
-                    <Link to={i.url}
+                <div className='flex' key={index}>
+                    <Link to={i.url} 
                         className={`${active === index + 1 ? "text-[#ffce6f]" : "text-[#fff]"} text-lg font-[500] px-6 cursor-pointer}`}
                     >
                         {i.title}
