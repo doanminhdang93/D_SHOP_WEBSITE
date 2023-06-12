@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../../styles/styles';
-import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai';
+import {AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineMessage} from 'react-icons/ai';
 
 const ProductDetails = ({data}) => {
     const [count,setCount] = useState(1);
@@ -20,11 +20,15 @@ const ProductDetails = ({data}) => {
         setCount(count + 1);
     }
 
+    const handleMessageSubmit = () =>{
+        navigate('/inbox?conversation=507ebjver884ehfdjeriv84')
+    }
+
     return (
         <div className="bg-white">
             {
                 data ? (
-                    <div className={`${styles.section} w-[90%] 800px:w-[80%] h-screen`}>
+                    <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
                         <div className="w-full py-5">
                             <div className="block w-full 800px:flex">
                                 <div className="w-full 800px:w-[50%]">
@@ -32,13 +36,13 @@ const ProductDetails = ({data}) => {
                                     <div className="w-full flex">
                                         <div className={`${select === 0 ? "border" : "null"} cursor-pointer`}>
                                             <img src={data?.image_Url[0].url} alt=''
-                                                className='h-[150px]'
+                                                className='h-[200px]'
                                                 onClick={() => setSelect(0)}
                                             ></img>
                                         </div>
                                         <div className={`${select === 1 ? "border" : "null"} cursor-pointer`}>
                                             <img src={data?.image_Url[1].url} alt=''
-                                                className='h-[150px]'
+                                                className='h-[200px]'
                                                 onClick={() => setSelect(1)}
                                             ></img>
                                         </div>
@@ -96,11 +100,172 @@ const ProductDetails = ({data}) => {
                                         )}
                                         </div>
                                     </div>
+
+                                    <div className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}>
+                                        <span className='text-white flex items-center'>
+                                            Thêm vào giỏ <AiOutlineShoppingCart className='ml-1'></AiOutlineShoppingCart>
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center pt-8">
+                                        <img src={data.shop.shop_avatar.url} alt="" className="w-[15%] h-[15%] rounded-full mr-2"/>
+                                        <div className='pr-10'>
+                                            <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                                                {data.shop.name}
+                                            </h3>
+                                            <h5 className='pb-3 text-[15px]'>
+                                                {data.shop.ratings} Lượt đánh giá
+                                            </h5>
+                                        </div> 
+
+                                        <div className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`} 
+                                            onClick={handleMessageSubmit}
+                                        >
+                                            <span className='text-white flex items-center'>
+                                                Gửi tin nhắn <AiOutlineMessage className='ml-1'></AiOutlineMessage>
+                                            </span>
+                                        </div>   
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
+
+                        <ProductDetailsInfo data={data}></ProductDetailsInfo>
+                        <br></br>
+                        <br></br>
                     </div>
                 ):null
+            }
+        </div>
+    )
+}
+
+const ProductDetailsInfo = ({data}) => {
+    const [active,setActive] = useState(1);
+
+    return (
+        <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
+            <div className="w-full flex justify-between border-b pt-10 pb-2">
+                <div className="relative">
+                    <h5 
+                        className='text-black text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]'
+                        onClick={() => setActive(1)}
+                    > 
+                        Chi tiết sản phẩm
+                    </h5>
+
+                    {
+                        active === 1 ? (
+                            <div className={`${styles.active_indicator}`}>
+
+                            </div>
+                        ) : null
+                    }
+                </div>
+                <div className="relative">
+                    <h5 
+                        className='text-black text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]'
+                        onClick={() => setActive(2)}
+                    > 
+                        Đánh giá sản phẩm
+                    </h5>
+
+                    {
+                        active === 2 ? (
+                            <div className={`${styles.active_indicator}`}>
+
+                            </div>
+                        ) : null
+                    }
+                </div>
+                <div className="relative">
+                    <h5 
+                        className='text-black text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]'
+                        onClick={() => setActive(3)}
+                    > 
+                        Thông tin người bán
+                    </h5>
+
+                    {
+                        active === 3 ? (
+                            <div className={`${styles.active_indicator}`}>
+
+                            </div>
+                        ) : null
+                    }
+                </div>
+            </div>
+
+            {
+                active === 1 ? (
+                    <>
+                        <p className='py-2 text-[18px] leading-8 pb-10 whitespace-pre-line'>
+                            {data.description}
+                        </p>
+                        <p className='py-2 text-[18px] leading-8 pb-10 whitespace-pre-line'>
+                            {data.description}
+                        </p>
+                        <p className='py-2 text-[18px] leading-8 pb-10 whitespace-pre-line'>
+                            {data.description}
+                        </p>
+                    </>
+                ) : null
+            }
+
+            {
+                active === 2 ? (
+                    <div className="w-full justify-center min-h-[40vh] flex items-center">
+                        <p>Chưa có đánh giá!</p> 
+                    </div>
+                ) : null
+            }
+
+            {
+                active === 3 && (
+                    <div className="w-full block 800px:flex p-5">
+                        <div className="w-full 800px:w-[50%]">
+                            <div className="flex items-center">
+                                <img 
+                                    src={data.shop.shop_avatar.url} alt="" 
+                                    className='w-[50px] h-[50px] rounded-full'    
+                                />
+                                <div className="pl-3">
+                                    <h3 className={`${styles.shop_name}`}>
+                                        {data.shop.name}
+                                    </h3>
+                                    <h5 className='pb-2 text-[15px]'>
+                                        {data.shop.ratings} Lượt đánh giá
+                                    </h5>
+                                </div>
+                            </div>
+                            <p className='pt-2'>
+                                {data.description}
+                            </p>
+                        </div>
+
+                        <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
+                            <div className="text-left">
+                                <h5 className='font-[600]'>
+                                    Đã tham gia: <span className="font-[500]">09 tháng 03, 2023</span>
+                                </h5>
+                                <h5 className='font-[600] pt-3'>
+                                    Tổng sản phẩm: <span className="font-[500]">2002</span>
+                                </h5>
+                                <h5 className='font-[600] pt-3'>
+                                    Lượt đánh giá: <span className="font-[500]">202</span>
+                                </h5>
+                                <Link to='/'>
+                                    <div className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}>
+                                        <h4 className='text-white'>
+                                            Tới cửa hàng
+                                        </h4>
+                                    </div>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                )
             }
         </div>
     )

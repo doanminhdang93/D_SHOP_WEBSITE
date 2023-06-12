@@ -35,7 +35,7 @@ const Footer = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:px-8 px-5 py-16 sm:text-center">
         <ul className="px-10 text-center sm:text-start flex sm:block flex-col items-center">
           <img
-            src={require("./images/LogoF.png")}
+            src={require("../../static/images/LogoF.png")}
             alt=""
             style={{ width: "200px" }}
           />

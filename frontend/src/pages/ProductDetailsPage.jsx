@@ -4,6 +4,7 @@ import Footer from '../components/Layout/Footer';
 import ProductDetails from '../components/Products/ProductDetails';
 import { useParams } from 'react-router-dom';
 import { productData } from '../static/data';
+import SuggestedProduct from '../components/Products/SuggestedProduct';
 
 const ProductDetailsPage = () => {
     const {name} = useParams();
@@ -19,6 +20,11 @@ const ProductDetailsPage = () => {
         <div>
             <Header></Header>
             <ProductDetails data={data}></ProductDetails>
+            {
+                data && (
+                    <SuggestedProduct data={data}></SuggestedProduct>
+                )
+            }
             <Footer></Footer>
         </div>
     )
