@@ -86,7 +86,7 @@ const DashboardSideBar = ({active}) => {
             </div>
 
             <div className='w-full flex items-center p-4'>
-                <Link to='/dashboard/coupons' className='w-full flex items-center'>
+                <Link to='/dashboard-coupons' className='w-full flex items-center'>
                     <AiOutlineGift size={30} color={`${active === 9 ? "#88b816" : "#555"}`}></AiOutlineGift>
                     <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 9 ? "text-[#88b816]" : "text-[#555]"}`}>
                         Mã giảm giá

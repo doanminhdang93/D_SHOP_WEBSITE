@@ -1,14 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import styles from '../../styles/styles';
 import {AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineMessage} from 'react-icons/ai';
+import { backend_url } from '../../server';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProductsShop } from '../../redux/actions/product';
 
 const ProductDetails = ({data}) => {
     const [count,setCount] = useState(1);
     const [click,setClick] = useState(false);
     const [select,setSelect] = useState(0);
-
     const navigate = useNavigate();
+
+    const {products} = useSelector((state) => state.products);
+    console.log(products);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllProductsShop(data && data?.shop._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch,data]);
 
     const decreaseCount = () => {
         if(count > 1) {
@@ -32,19 +44,23 @@ const ProductDetails = ({data}) => {
                         <div className="w-full py-5">
                             <div className="block w-full 800px:flex">
                                 <div className="w-full 800px:w-[50%]">
-                                    <img src={data.image_Url[select].url} alt="" className='w-[80%]'></img>
+                                    <img 
+                                        src={`${backend_url}${data && data.images[select]}`} 
+                                        alt="" className='w-[80%]'
+                                    ></img>
                                     <div className="w-full flex">
-                                        <div className={`${select === 0 ? "border" : "null"} cursor-pointer`}>
-                                            <img src={data?.image_Url[0].url} alt=''
-                                                className='h-[200px]'
-                                                onClick={() => setSelect(0)}
-                                            ></img>
-                                        </div>
+                                        {
+                                            data && data.images.map((i,index) =>(
+                                                <div key={index} className={`${select === 0 ? "border" : "null"} cursor-pointer`}>
+                                                    <img src={`${backend_url}${i}`} alt=''
+                                                        className='h-[200px] overflow-hidden mr-3 mt-3'
+                                                        onClick={() => setSelect(index)}
+                                                    ></img>
+                                                </div>
+                                            ))
+                                        }
                                         <div className={`${select === 1 ? "border" : "null"} cursor-pointer`}>
-                                            <img src={data?.image_Url[1].url} alt=''
-                                                className='h-[200px]'
-                                                onClick={() => setSelect(1)}
-                                            ></img>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -56,10 +72,10 @@ const ProductDetails = ({data}) => {
                                     <p>{data.description}</p>
                                     <div className="flex pt-3">
                                         <h4 className={`${styles.productDiscountPrice}`}>
-                                            {data.discount_price}$
+                                            {data.discountPrice}$
                                         </h4>
                                         <h3 className={`${styles.price}`}>
-                                            {data.price ? data.price + '$' : null}
+                                            {data.originalPrice ? data.originalPrice + '$' : null}
                                         </h3>
                                     </div>
 
@@ -108,13 +124,21 @@ const ProductDetails = ({data}) => {
                                     </div>
 
                                     <div className="flex items-center pt-8">
-                                        <img src={data.shop.shop_avatar.url} alt="" className="w-[15%] h-[15%] rounded-full mr-2"/>
-                                        <div className='pr-10'>
-                                            <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                                                {data.shop.name}
-                                            </h3>
+                                        <Link to={`/shop/preview/${data?.shop._id}`}>
+                                            <img
+                                            src={`${backend_url}${data?.shop?.avatar}`}
+                                            alt=""
+                                            className="w-[50px] h-[50px] rounded-full mr-2"
+                                            />
+                                        </Link>
+                                        <div className="pr-8">
+                                            <Link to={`/shop/preview/${data?.shop._id}`}>
+                                                <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                                                    {data.shop.name}
+                                                </h3>
+                                            </Link>
                                             <h5 className='pb-3 text-[15px]'>
-                                                {data.shop.ratings} Lượt đánh giá
+                                                (4/5) đánh giá
                                             </h5>
                                         </div> 
 
@@ -131,7 +155,7 @@ const ProductDetails = ({data}) => {
                             </div>
                         </div>
 
-                        <ProductDetailsInfo data={data}></ProductDetailsInfo>
+                        <ProductDetailsInfo data={data} products={products}></ProductDetailsInfo>
                         <br></br>
                         <br></br>
                     </div>
@@ -141,7 +165,7 @@ const ProductDetails = ({data}) => {
     )
 }
 
-const ProductDetailsInfo = ({data}) => {
+const ProductDetailsInfo = ({data,products}) => {
     const [active,setActive] = useState(1);
 
     return (
@@ -203,12 +227,6 @@ const ProductDetailsInfo = ({data}) => {
                         <p className='py-2 text-[18px] leading-8 pb-10 whitespace-pre-line'>
                             {data.description}
                         </p>
-                        <p className='py-2 text-[18px] leading-8 pb-10 whitespace-pre-line'>
-                            {data.description}
-                        </p>
-                        <p className='py-2 text-[18px] leading-8 pb-10 whitespace-pre-line'>
-                            {data.description}
-                        </p>
                     </>
                 ) : null
             }
@@ -227,7 +245,7 @@ const ProductDetailsInfo = ({data}) => {
                         <div className="w-full 800px:w-[50%]">
                             <div className="flex items-center">
                                 <img 
-                                    src={data.shop.shop_avatar.url} alt="" 
+                                    src={`${backend_url}${data?.shop.avatar}`} alt="" 
                                     className='w-[50px] h-[50px] rounded-full'    
                                 />
                                 <div className="pl-3">
@@ -235,22 +253,22 @@ const ProductDetailsInfo = ({data}) => {
                                         {data.shop.name}
                                     </h3>
                                     <h5 className='pb-2 text-[15px]'>
-                                        {data.shop.ratings} Lượt đánh giá
+                                        (4/5) đánh giá
                                     </h5>
                                 </div>
                             </div>
                             <p className='pt-2'>
-                                {data.description}
+                                {data.shop.description}
                             </p>
                         </div>
 
                         <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
                             <div className="text-left">
                                 <h5 className='font-[600]'>
-                                    Đã tham gia: <span className="font-[500]">09 tháng 03, 2023</span>
+                                    Đã tham gia: <span className="font-[500]">{data.shop?.createAt?.slice(0,10)}</span>
                                 </h5>
                                 <h5 className='font-[600] pt-3'>
-                                    Tổng sản phẩm: <span className="font-[500]">2002</span>
+                                    Tổng sản phẩm: <span className="font-[500]">{products && products.length}</span>
                                 </h5>
                                 <h5 className='font-[600] pt-3'>
                                     Lượt đánh giá: <span className="font-[500]">202</span>

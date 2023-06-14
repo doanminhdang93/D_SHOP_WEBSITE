@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { categoriesData } from '../../static/data';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { createProduct } from '../../redux/actions/product';
 import {toast} from 'react-toastify';
-import { MdToday } from 'react-icons/md';
+import { createEvent } from '../../redux/actions/event';
 
 const CreateEvent = () => {
     const {seller} = useSelector((state) => state.seller);
-    const {success,error} = useSelector((state) => state.products);
+    const {success,error} = useSelector((state) => state.events);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -46,8 +45,8 @@ const CreateEvent = () => {
             toast.error(error);
         }
         if(success){
-            toast.success("Sản phẩm đã được tạo thành công!");
-            navigate("/dashboard");
+            toast.success("Sự kiện đã được tạo thành công!");
+            navigate("/dashboard-events");
             window.location.reload();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,8 +73,10 @@ const CreateEvent = () => {
         newForm.append("discountPrice",discountPrice);
         newForm.append("stock",stock);
         newForm.append("shopId",seller._id);
+        newForm.append("start_Date",startDate.toISOString());
+        newForm.append("finish_Date",endDate.toISOString());
 
-        dispatch(createProduct(newForm));
+        dispatch(createEvent(newForm));
     }
 
     return (
@@ -97,7 +98,7 @@ const CreateEvent = () => {
                         value={name} 
                         onChange={(e) => setName(e.target.value)}
                         className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm'
-                        placeholder='Nhập tên sản phẩm có trong sự kiện...'
+                        placeholder='Nhập tên sự kiện của sản phẩm...'
                     />
                 </div>
                 <br />
@@ -114,7 +115,7 @@ const CreateEvent = () => {
                         value={description}
                         className="mt-2 appearance-none block w-full pt-2 px-3 border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Nhập mô tả sản phẩm..."
+                        placeholder="Nhập mô tả sự kiện..."
                     ></textarea>
                 </div>
                 <br />
@@ -126,7 +127,7 @@ const CreateEvent = () => {
                         value={category}
                         onChange={(e)=>setCategory(e.target.value)}
                     >
-                        <option value="Chọn loại sản phẩm">Chọn loại sản phẩm</option>
+                        <option value="Chọn loại sản phẩm dùng cho sự kiện">Chọn loại sản phẩm</option>
                         {
                             categoriesData && categoriesData.map((i) =>(
                                 <option
@@ -148,7 +149,7 @@ const CreateEvent = () => {
                         value={tags} 
                         onChange={(e) => setTags(e.target.value)}
                         className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm'
-                        placeholder='Nhập nhãn sản phẩm...'
+                        placeholder='Nhập nhãn sản phẩm dùng cho sự kiện...'
                     />
                 </div>
                 <br />
@@ -208,7 +209,6 @@ const CreateEvent = () => {
                         onChange={handleStartDateChange}
                         min={today}
                         className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm'
-                        placeholder='Nhập ngày bắt đầu sự kiện...'
                     />
                 </div>
                 <br />
@@ -225,7 +225,6 @@ const CreateEvent = () => {
                         onChange={handleEndDateChange}
                         min={minEndDate}
                         className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm'
-                        placeholder='Nhập ngày bắt đầu sự kiện...'
                     />
                 </div>
                 <br />
@@ -250,7 +249,7 @@ const CreateEvent = () => {
                     </div>
                     <br />
                     <div>
-                        <input type="submit" value="Tạo sản phẩm"
+                        <input type="submit" value="Tạo sự kiện"
                             className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm cursor-pointer'
                         />
                     </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from 'react-icons/ai';
 import ProductDetailsCard from '../ProductDetailsCard/ProductDetailsCard.jsx';
+import { backend_url } from '../../../server';
 
 const ProductCard = ({data}) => {
     const [click, setClick] = useState(false);
@@ -17,12 +18,12 @@ const ProductCard = ({data}) => {
                 </div>
 
                 <Link to={`/product/${product_name}`}>
-                    <img src={data.image_Url[0].url} alt=""
+                    <img src={`${backend_url}${data.images && data.images[0]}`} alt=""
                         className='w-full h-[170px] object-contain'
                     />
                 </Link>
 
-                <Link to='/'>
+                <Link to={`/shop/preview/${data?.shop._id}`}>
                     <h5 className={`${styles.shop_name}`}>
                         {data.shop.name}
                     </h5>
@@ -64,15 +65,15 @@ const ProductCard = ({data}) => {
                     <div className="py-2 flex items-center justify-between">
                         <div className="flex">
                             <h5 className={`${styles.productDiscountPrice}`}>
-                                {data.price === 0 ? data.price : data.discount_price}$ 
+                                {data.originalPrice === 0 ? data.originalPrice : data.discountPrice}$ 
                             </h5>
                             <h4 className={`${styles.price}`}>
-                                {data.price ? data.price + " $": null}
+                                {data.originalPrice ? data.originalPrice + " $": null}
                             </h4>
                         </div>
 
                         <span className='font-[400] text-[17px] text-[#68d284]'>
-                            {data.total_sell} đã bán     
+                            {data?.sold_out} đã bán     
                         </span>
                     </div>    
                 </Link>

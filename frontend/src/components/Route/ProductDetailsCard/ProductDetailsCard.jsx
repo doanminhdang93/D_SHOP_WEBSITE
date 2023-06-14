@@ -3,6 +3,8 @@ import { useState } from 'react'
 import {RxCross1} from 'react-icons/rx';
 import styles from '../../../styles/styles';
 import {AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineShoppingCart} from 'react-icons/ai';
+import { backend_url } from '../../../server';
+import { Link } from 'react-router-dom';
 
 const ProductDetailsCard = ({setOpen,data}) => {
     const [count, setCount] = useState(1);
@@ -37,17 +39,19 @@ const ProductDetailsCard = ({setOpen,data}) => {
 
                             <div className="block w-full 800px:flex">
                                 <div className="w-full 800px:w-[50%]">
-                                    <img src={data.image_Url[0].url} alt=''/>
+                                    <img src={`${backend_url}${data.images && data.images[0]}`} alt=''/>
                                     <div className="flex">
-                                        <img src={data.shop.shop_avatar.url} alt='' className="w-[50px] h-[50px] rounded-full mr-2"/>
-                                        <div>
-                                            <h3 className={`${styles.shop_name}`}>
-                                                {data.shop.name}
-                                            </h3>
-                                            <h5 className='pb-3 text-[15px]'>
-                                                ({data.shop.ratings}) xếp hạng
-                                            </h5>
-                                        </div>
+                                        <Link to={`/shop/preview/${data.shop._id}`} className="flex">
+                                            <img src={`${backend_url}${data?.shop?.avatar}`} alt='' className="w-[50px] h-[50px] rounded-full mr-2"/>
+                                            <div>
+                                                <h3 className={`${styles.shop_name}`}>
+                                                    {data.shop.name}
+                                                </h3>
+                                                <h5 className='pb-3 text-[15px]'>
+                                                    (4.5) xếp hạng
+                                                </h5>
+                                            </div>
+                                        </Link>
                                     </div>
 
                                     <div className={`${styles.button} bg-[#000] mt-4 rounded-[10px] h-11`} onClick={handleMessageSubmit}>
@@ -57,7 +61,7 @@ const ProductDetailsCard = ({setOpen,data}) => {
                                     </div>
 
                                     <h5 className="text-[16px] text-[red] mt-5">
-                                        ({data.total_sell}) đã bán
+                                        (50) đã bán
                                     </h5>
                                 </div>
 
@@ -69,10 +73,10 @@ const ProductDetailsCard = ({setOpen,data}) => {
 
                                     <div className="flex pt-3">
                                         <h4 className={`${styles.productDiscountPrice}`}>
-                                            {data.discount_price}$
+                                            {data.discountPrice}$
                                         </h4>
                                         <h3 className={`${styles.price}`}>
-                                            {data.price ? data.price + "$" : null}
+                                            {data.originalPrice  ? data.originalPrice  + "$" : null}
                                         </h3>
                                     </div>
 

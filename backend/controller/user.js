@@ -154,7 +154,7 @@ router.get("/logout",isAuthenticated,catchAsyncErrors(async(req,res,next)=>{
         })
         res.status(201).json({
             success: true,
-            message: "User logged out successfully!"
+            message: "Người dùng đã đăng xuất thành công!"
         });
 
     }catch(err){
