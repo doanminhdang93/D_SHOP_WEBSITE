@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import {
@@ -17,6 +17,7 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   OrderSuccessPage,
+  PaymentPage,
 } from "./routes/Routes.js";
 import {
   ShopHomePage,
@@ -35,15 +36,42 @@ import { loadSeller, loadUser } from "./redux/actions/user";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { getAllProducts } from "./redux/actions/product";
+import { getAllEvents } from "./redux/actions/event";
+import axios from "axios";
+import { server } from "./server";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const App = () => {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
+  async function getStripeApiKey() {
+    const { data } = await axios.get(`${server}/payment/stripeApiKey`);
+    setStripeApiKey(data.stripeApiKey);
+  }
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
+    Store.dispatch(getAllEvents());
+    getStripeApiKey();
   }, []);
   return (
     <BrowserRouter>
+      {stripeApiKey && (
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <Routes>
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Elements>
+      )}
       <Routes>
         <Route path="/" element={<HomePage></HomePage>}></Route>
 
@@ -64,7 +92,7 @@ const App = () => {
         <Route path="/products" element={<ProductsPage></ProductsPage>}></Route>
 
         <Route
-          path="/product/:name"
+          path="/product/:id"
           element={<ProductDetailsPage></ProductDetailsPage>}
         ></Route>
 
@@ -101,7 +129,7 @@ const App = () => {
         ></Route>
 
         {/* Shop Routes */}
-        <Route path="/shop/preview/:id" element={<ShopPreviewPage/>} />
+        <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
 
         <Route
           path="/shop-create"
@@ -175,7 +203,6 @@ const App = () => {
             </SellerProtectedRoute>
           }
         ></Route>
-
       </Routes>
 
       <ToastContainer

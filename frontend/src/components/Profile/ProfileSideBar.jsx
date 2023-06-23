@@ -2,8 +2,9 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { RxPerson } from 'react-icons/rx';
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from 'react-icons/hi';
-import { AiOutlineMessage, AiOutlineCreditCard, AiOutlineLogin } from 'react-icons/ai';
+import { AiOutlineMessage, AiOutlineLogin } from 'react-icons/ai';
 import {MdOutlineTrackChanges} from 'react-icons/md';
+import {RiLockPasswordLine} from 'react-icons/ri';
 import {TbAddressBook} from 'react-icons/tb';
 import axios from 'axios';
 import { server } from '../../server';
@@ -59,9 +60,9 @@ const ProfileSideBar = ({active,setActive}) => {
             </div>
 
             <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(6)}>
-                <AiOutlineCreditCard size={20} color={active === 6 ? 'red' : ''}></AiOutlineCreditCard>
+                <RiLockPasswordLine size={20} color={active === 6 ? 'red' : ''}></RiLockPasswordLine>
                 <span className={`pl-3 ${active === 6 ? 'text-[red]' : ''} 800px:block hidden`}>
-                    Phương thức thanh toán
+                    Thay đổi mật khẩu
                 </span>
             </div>
 

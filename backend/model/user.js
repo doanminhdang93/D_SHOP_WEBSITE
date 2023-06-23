@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
   phoneNumber:{
-    type: Number,
+    type: String,
+    required: [true, "Vui lòng nhập số điện thoại của bạn!"],
   },
   addresses:[
     {

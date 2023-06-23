@@ -11,6 +11,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const SignUp = () => {
     newForm.append("name",name);
     newForm.append("email",email);
     newForm.append("password",password);
+    newForm.append("phoneNumber",phoneNumber);
 
     axios.post(`${server}/user/create-user`,newForm, config).then((res) => {
       toast.success(res.data.message);
@@ -36,6 +38,7 @@ const SignUp = () => {
       setEmail("");
       setPassword("");
       setAvatar();
+      setPhoneNumber("");
     }).catch((err) => {
       toast.error(err.response.data.message);
     });
@@ -67,6 +70,26 @@ const SignUp = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Số điện thoại
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  autoComplete="phoneNumber"
+                  required
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -146,7 +169,7 @@ const SignUp = () => {
                   htmlFor="file-input"
                   className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
-                  <span>Tải lên file</span>
+                  <span className="cursor-pointer">Tải lên file</span>
                   <input
                     type="file"
                     name="avatar" 

@@ -1,23 +1,63 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from 'react-icons/ai';
 import ProductDetailsCard from '../ProductDetailsCard/ProductDetailsCard.jsx';
 import { backend_url } from '../../../server';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishlist';
+import { toast } from 'react-toastify';
+import { addToCart } from '../../../redux/actions/cart';
 
 const ProductCard = ({data}) => {
+    const {wishlist} = useSelector((state) => state.wishlist);
+    const {cart} = useSelector((state) => state.cart);
     const [click, setClick] = useState(false);
     const [open,setOpen] = useState(false);
+    const dispatch = useDispatch();
 
-    const d = data.name;
-    const product_name = d.replace(/\s+/g, '-');
+    useEffect(() =>{
+        if(wishlist && wishlist.find((i) => i._id === data._id)){
+            setClick(true);
+        }
+        else{
+            setClick(false);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[wishlist])
+
+    const removeFromWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(removeFromWishlist(data));
+    }
+
+    const addToWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(addToWishlist(data));
+    }
+
+    const addToCartHandler = (id) => {
+        const isItemExists = cart && cart.find((i) => i._id === id);
+        if(isItemExists) {
+            toast.error("Sản phẩm đã có trong giỏ hàng!");
+        }else{
+            if(data.stock < 1){
+                toast.error("Số lượng sản phẩm có hạn!");
+            }else{
+                const cartData = {...data,qty: 1};
+                dispatch(addToCart(cartData));
+                toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
+            }
+        }
+    }
+
     return (
         <>
             <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
                 <div className="flex justify-end">
                 </div>
 
-                <Link to={`/product/${product_name}`}>
+                <Link to={`/product/${data._id}`}>
                     <img src={`${backend_url}${data.images && data.images[0]}`} alt=""
                         className='w-full h-[170px] object-contain'
                     />
@@ -29,7 +69,7 @@ const ProductCard = ({data}) => {
                     </h5>
                 </Link>
                 
-                <Link to={`/product/${product_name}`}>
+                <Link to={`/product/${data._id}`}>
                     <h4 className='pb-3 font-[500]'>
                         {data.name.length > 40 ? data.name.slice(0,40) + '...' : data.name}
                     </h4>
@@ -84,7 +124,7 @@ const ProductCard = ({data}) => {
                         <AiFillHeart
                             size={22}
                             className='cursor-pointer absolute right-2 top-5'
-                            onClick={()=> setClick(!click)}
+                            onClick={()=> removeFromWishlistHandler(data)}
                             color={click ? "red" : "black"}
                             title='Xoá khỏi danh sách yêu thích'
                         ></AiFillHeart>
@@ -92,7 +132,7 @@ const ProductCard = ({data}) => {
                         <AiOutlineHeart
                             size={22}
                             className='cursor-pointer absolute right-2 top-5'
-                            onClick={()=> setClick(!click)}
+                            onClick={()=> addToWishlistHandler(data)}
                             color={click ? "red" : "black"}
                             title='Thêm vào danh sách yêu thích'
                         ></AiOutlineHeart>
@@ -109,7 +149,7 @@ const ProductCard = ({data}) => {
                     <AiOutlineShoppingCart
                         size={25}
                         className='cursor-pointer absolute right-2 top-24'
-                        onClick={()=> setOpen(!open)}
+                        onClick={()=> addToCartHandler(data._id)}
                         color="#444"
                         title='Thêm vào giỏ hàng'
                     ></AiOutlineShoppingCart>

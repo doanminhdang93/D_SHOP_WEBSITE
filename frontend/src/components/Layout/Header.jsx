@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
-import { categoriesData, productData } from "../../static/data";
+import { categoriesData } from "../../static/data";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -23,6 +23,8 @@ const Header = ({ activeHeading }) => {
   //console.log(user);
   const { allProducts } = useSelector((state) => state.products);
   //console.log(allProducts);
+  const { cart } = useSelector((state) => state.cart);
+  const {wishlist} = useSelector((state) => state.wishlist);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -82,10 +84,8 @@ const Header = ({ activeHeading }) => {
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
                   searchData.map((i) => {
-                    const d = i.name;
-                    const Product_name = d.replace(/\s+/g, "-");
                     return (
-                      <Link to={`/product/${Product_name}`}>
+                      <Link to={`/product/${i._id}`}>
                         <div className="w-full flex item-start-py-3">
                           <img
                             src={`${backend_url}${i.images[0]}`}
@@ -161,7 +161,7 @@ const Header = ({ activeHeading }) => {
                   color="rgb(255 255 255 / 83%)"
                 ></AiOutlineHeart>
                 <span className="absolute right-0 top-0 rounded-full bg-[#3BC177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-right text-center">
-                  0
+                  {wishlist && wishlist.length}
                 </span>
               </div>
             </div>
@@ -176,7 +176,7 @@ const Header = ({ activeHeading }) => {
                   color="rgb(255 255 255 / 83%)"
                 ></AiOutlineShoppingCart>
                 <span className="absolute right-0 top-0 rounded-full bg-[#3BC177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-right text-center">
-                  1
+                  {cart && cart.length}
                 </span>
               </div>
             </div>
@@ -242,7 +242,7 @@ const Header = ({ activeHeading }) => {
                 className="cursor-pointer"
               ></AiOutlineShoppingCart>
               <span className="absolute right-0 top-0 rounded-full bg-[#3BC177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-right text-center">
-                1
+                {cart && cart.length}
               </span>
             </div>
           </div>

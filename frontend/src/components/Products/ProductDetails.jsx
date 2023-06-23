@@ -5,22 +5,33 @@ import {AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineMessage} fr
 import { backend_url } from '../../server';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProductsShop } from '../../redux/actions/product';
+import { addToWishlist, removeFromWishlist } from '../../redux/actions/wishlist';
+import { toast } from 'react-toastify';
+import { addToCart } from '../../redux/actions/cart';
 
 const ProductDetails = ({data}) => {
     const [count,setCount] = useState(1);
     const [click,setClick] = useState(false);
     const [select,setSelect] = useState(0);
-    const navigate = useNavigate();
-
+    
+    const {wishlist} = useSelector((state) => state.wishlist);
+    const {cart} = useSelector((state) => state.cart);
     const {products} = useSelector((state) => state.products);
-    console.log(products);
+    //console.log(products);
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    useEffect(() =>{
         dispatch(getAllProductsShop(data && data?.shop._id));
+        if(wishlist && wishlist.find((i) => i._id === data?._id)){
+            setClick(true);
+        }
+        else{
+            setClick(false);
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch,data]);
+    },[data,wishlist])
 
     const decreaseCount = () => {
         if(count > 1) {
@@ -34,6 +45,31 @@ const ProductDetails = ({data}) => {
 
     const handleMessageSubmit = () =>{
         navigate('/inbox?conversation=507ebjver884ehfdjeriv84')
+    }
+
+    const removeFromWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(removeFromWishlist(data));
+    }
+
+    const addToWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(addToWishlist(data));
+    }
+
+    const addToCartHandler = (id) => {
+        const isItemExists = cart && cart.find((i) => i._id === id);
+        if(isItemExists) {
+            toast.error("Sản phẩm đã có trong giỏ hàng!");
+        }else{
+            if(data.stock < 1){
+                toast.error("Số lượng sản phẩm có hạn!");
+            }else{
+                const cartData = {...data,qty: count};
+                dispatch(addToCart(cartData));
+                toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
+            }
+        }
     }
 
     return (
@@ -101,7 +137,7 @@ const ProductDetails = ({data}) => {
                                             <AiFillHeart
                                                 size={30}
                                                 className='cursor-pointer'
-                                                onClick={()=> setClick(!click)}
+                                                onClick={()=> removeFromWishlistHandler(data)}
                                                 color={click ? "red" : "black"}
                                                 title='Xoá khỏi danh sách yêu thích'
                                             ></AiFillHeart>
@@ -109,15 +145,17 @@ const ProductDetails = ({data}) => {
                                             <AiOutlineHeart
                                                 size={30}
                                                 className='cursor-pointer'
-                                                onClick={()=> setClick(!click)}
+                                                onClick={()=> addToWishlistHandler(data)}
                                                 color={click ? "red" : "black"}
                                                 title='Thêm vào danh sách yêu thích'
-                                            ></AiOutlineHeart>
+                                            ></AiOutlineHeart> 
                                         )}
                                         </div>
                                     </div>
 
-                                    <div className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}>
+                                    <div className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
+                                        onClick={() => addToCartHandler(data._id)}
+                                    >
                                         <span className='text-white flex items-center'>
                                             Thêm vào giỏ <AiOutlineShoppingCart className='ml-1'></AiOutlineShoppingCart>
                                         </span>
@@ -265,7 +303,7 @@ const ProductDetailsInfo = ({data,products}) => {
                         <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
                             <div className="text-left">
                                 <h5 className='font-[600]'>
-                                    Đã tham gia: <span className="font-[500]">{data.shop?.createAt?.slice(0,10)}</span>
+                                    Đã tham gia: <span className="font-[500]">{data.shop?.createdAt?.slice(0,10)}</span>
                                 </h5>
                                 <h5 className='font-[600] pt-3'>
                                     Tổng sản phẩm: <span className="font-[500]">{products && products.length}</span>
