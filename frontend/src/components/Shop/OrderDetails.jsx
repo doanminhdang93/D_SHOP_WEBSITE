@@ -76,7 +76,7 @@ const OrderDetails = () => {
           Mã đơn hàng: <span>#{data?._id?.slice(0, 8)}</span>
         </h5>
         <h5 className="text-[#00000084]">
-          Ngày tạo: <span>{data?.createAt?.slice(0, 10)}</span>
+          Ngày tạo: <span>{data?.createdAt?.slice(0, 10)}</span>
         </h5>
       </div>
 
@@ -101,7 +101,7 @@ const OrderDetails = () => {
         ))}
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
-          Tổng tiền <strong>${data.totalPrice}</strong>
+          Tổng tiền <strong>${data?.totalPrice}</strong>
         </h5>
       </div>
       <br />
@@ -132,56 +132,59 @@ const OrderDetails = () => {
       <br />
       <br />
       <h4 className="pt-3 text-[20px] font-[600]">Trạng thái đơn hàng</h4>
-      {(data?.status !== "Đang xử lý việc hoàn tiền" &&
-        data?.status !== "Hoàn tiền thành công") && (
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-        >
-          {[
-            "Đang xử lý",
-            "Đã bàn giao cho đơn vị vận chuyển",
-            "Đang giao hàng",
-            "Đã nhận hàng",
-            "Đang trên đường",
-            "Đã giao hàng",
-          ]
-            .slice(
-              [
-                "Đang xử lý",
-                "Đã bàn giao cho đơn vị vận chuyển",
-                "Đang giao hàng",
-                "Đã nhận hàng",
-                "Đang trên đường",
-                "Đã giao hàng",
-              ].indexOf(data?.status)
-            )
-            .map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-        </select>
-      )}
+      {data?.status !== "Đang xử lý việc hoàn tiền" &&
+        data?.status !== "Hoàn tiền thành công" && (
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+          >
+            {[
+              "Đang xử lý",
+              "Đã bàn giao cho đơn vị vận chuyển",
+              "Đang giao hàng",
+              "Đã nhận hàng",
+              "Đang trên đường",
+              "Đã giao hàng",
+            ]
+              .slice(
+                [
+                  "Đang xử lý",
+                  "Đã bàn giao cho đơn vị vận chuyển",
+                  "Đang giao hàng",
+                  "Đã nhận hàng",
+                  "Đang trên đường",
+                  "Đã giao hàng",
+                ].indexOf(data?.status)
+              )
+              .map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+          </select>
+        )}
 
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-      >
-        {["Đang xử lý việc hoàn tiền", "Hoàn tiền thành công"]
-          .slice(
-            ["Đang xử lý việc hoàn tiền", "Hoàn tiền thành công"].indexOf(
-              data?.status
-            )
-          )
-          .map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-      </select>
+      {data?.status === "Đang xử lý việc hoàn tiền" ||
+        data?.status === "Hoàn tiền thành công" ? (
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+          >
+            {["Đang xử lý việc hoàn tiền", "Hoàn tiền thành công"]
+              .slice(
+                ["Đang xử lý việc hoàn tiền", "Hoàn tiền thành công"].indexOf(
+                  data?.status
+                )
+              )
+              .map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+          </select>
+        ):null}
 
       <div
         className={`${styles.button} !rounded-[4px] text-white font-[500] !h-[45px] text-[18px]`}

@@ -17,39 +17,36 @@ const TrackOrder = () => {
   const data = orders && orders.find((item) => item._id === id);
 
   return (
-    <div>
+    <div className="w-full h-[80vh] flex justify-center items-center">
+      {" "}
       <>
         {data && data?.status === "Đang xử lý" ? (
-          <div className="w-full h-[80vh] flex justify-center items-center">
-            <h1 className="text-[20px] text-center">
-              Đơn hàng đang được xử lý!
-            </h1>
-          </div>
+          <h1 className="text-[20px] text-center">Đơn hàng đang được xử lý!</h1>
         ) : data?.status === "Đã bàn giao cho đơn vị vận chuyển" ? (
           <h1 className="text-[20px]">
-            Đơn hàng của bạn đã được bàn giao cho đơn vị vận chuyển.
+            Đơn hàng của bạn đã được bàn giao cho đơn vị vận chuyển!
           </h1>
         ) : data?.status === "Đang giao hàng" ? (
           <h1 className="text-[20px]">
-            Đơn hàng của bạn đang được vận chuyển.
+            Đơn hàng của bạn đang được vận chuyển!
           </h1>
         ) : data?.status === "Đã nhận hàng" ? (
           <h1 className="text-[20px]">
             Đơn hàng của bạn đã đến nơi. Sẽ có người giao hàng cho bạn trong
-            thời gian sớm nhất.
+            thời gian sớm nhất!
           </h1>
         ) : data?.status === "Đang trên đường" ? (
           <h1 className="text-[20px]">
-            Đơn hàng của bạn đang được vận chuyển.
+            Đơn hàng của bạn đang được vận chuyển!
           </h1>
         ) : data?.status === "Đã giao hàng" ? (
           <h1 className="text-[20px]">
-            Đơn hàng của bạn đã được giao thành công.
+            Đơn hàng của bạn đã được giao thành công!
           </h1>
         ) : data?.status === "Đang xử lý việc hoàn tiền" ? (
-          <h1 className="text-[20px]">Việc hoàn tiền đang được xử lý.</h1>
+          <h1 className="text-[20px]">Việc hoàn tiền đang được xử lý!</h1>
         ) : data?.status === "Hoàn tiền thành công" ? (
-          <h1 className="text-[20px]">Đã hoàn tiền thành công.</h1>
+          <h1 className="text-[20px]">Đã hoàn tiền thành công!</h1>
         ) : null}
       </>
     </div>

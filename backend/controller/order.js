@@ -52,7 +52,7 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const orders = await Order.find({ "user._id": req.params.userId }).sort({
-        createAt: -1,
+        createdAt: -1,
       });
 
       res.status(200).json({
@@ -73,7 +73,7 @@ router.get(
       const orders = await Order.find({
         "cart.shopId": req.params.shopId,
       }).sort({
-        createAt: -1,
+        createdAt: -1,
       });
 
       res.status(200).json({

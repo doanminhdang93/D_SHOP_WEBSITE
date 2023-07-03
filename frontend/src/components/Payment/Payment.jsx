@@ -27,10 +27,6 @@ const Payment = () => {
     setOrderData(orderData);
   }, []);
 
-  const createOrder = (data, actions) => {
-    //
-  };
-
   const paymentData = {
     amount: Math.round(orderData?.totalPrice * 100),
   };
@@ -75,16 +71,16 @@ const Payment = () => {
           await axios
             .post(`${server}/order/create-order`, order, config)
             .then((res) => {
-                navigate('/order/success');
-                toast.success("Đơn hàng đã được đặt thành công!");
-                localStorage.setItem('cartItems',JSON.stringify([]));
-                localStorage.setItem('latestOrder',JSON.stringify([]));
-                window.location.reload();
+              navigate("/order/success");
+              toast.success("Đơn hàng đã được đặt thành công!");
+              localStorage.setItem("cartItems", JSON.stringify([]));
+              localStorage.setItem("latestOrder", JSON.stringify([]));
+              window.location.reload();
             });
         }
       }
     } catch (err) {
-        toast.error(err);
+      toast.error(err);
     }
   };
 
@@ -102,14 +98,14 @@ const Payment = () => {
     };
 
     await axios
-    .post(`${server}/order/create-order`, order, config)
-    .then((res) => {
-      navigate("/order/success");
-      toast.success("Đơn hàng đã được đặt thành công!");
-      localStorage.setItem("cartItems", JSON.stringify([]));
-      localStorage.setItem("latestOrder", JSON.stringify([]));
-      window.location.reload();
-    });
+      .post(`${server}/order/create-order`, order, config)
+      .then((res) => {
+        navigate("/order/success");
+        toast.success("Đơn hàng đã được đặt thành công!");
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrder", JSON.stringify([]));
+        window.location.reload();
+      });
   };
 
   return (
@@ -118,25 +114,19 @@ const Payment = () => {
         <div className="w-full 800px:w-[65%]">
           <PaymentInfo
             user={user}
-            createOrder={createOrder}
             paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
-          <CartData orderData={orderData}/>
+          <CartData orderData={orderData} />
         </div>
       </div>
     </div>
   );
 };
 
-const PaymentInfo = ({
-  user,
-  createOrder,
-  paymentHandler,
-  cashOnDeliveryHandler,
-}) => {
+const PaymentInfo = ({ user, paymentHandler, cashOnDeliveryHandler }) => {
   const [select, setSelect] = useState(1);
 
   return (

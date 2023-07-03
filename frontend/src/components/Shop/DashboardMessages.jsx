@@ -150,6 +150,7 @@ const DashboardMessages = () => {
   };
 
   const handleImageUpload = async (e) => {
+    e.preventDefault();
     const file = e.target.files[0];
     setImages(file);
     imageSendingHandler(file);
@@ -259,7 +260,7 @@ const MessageList = ({
   online,
   setActiveStatus,
 }) => {
-  console.log(data);
+  //console.log(data);
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
   const handleClick = (id) => {
@@ -302,9 +303,9 @@ const MessageList = ({
           className="w-[50px] h-[50px] rounded-full"
         />
         {online ? (
-          <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
+          <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute bottom-[2px] right-[2px]" />
         ) : (
-          <div className="w-[12px] h-[12px] bg-[#c7b9b9] rounded-full absolute top-[2px] right-[2px]" />
+          <div className="w-[12px] h-[12px] bg-[#c7b9b9] rounded-full absolute bottom-[2px] right-[2px]" />
         )}
       </div>
       <div className="pl-3">

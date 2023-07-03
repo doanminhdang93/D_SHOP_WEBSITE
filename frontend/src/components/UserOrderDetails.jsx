@@ -22,7 +22,7 @@ const UserOrderDetails = () => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
+    dispatch(getAllOrdersOfUser(user?._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
@@ -53,15 +53,18 @@ const UserOrderDetails = () => {
       });
   };
 
-  const refundHandler = async() => {
-    await axios.put(`${server}/order/order-refund/${id}`,{
-      status: "Đang xử lý việc hoàn tiền"
-    }).then((res) =>{
-      toast.success(res.data.message);
-      dispatch(getAllOrdersOfUser(user._id));
-    }).catch((err) => {
-      toast.error(err.response.data.message);
-    })
+  const refundHandler = async () => {
+    await axios
+      .put(`${server}/order/order-refund/${id}`, {
+        status: "Đang xử lý việc hoàn tiền",
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+        dispatch(getAllOrdersOfUser(user._id));
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   return (
@@ -78,7 +81,7 @@ const UserOrderDetails = () => {
           Mã đơn hàng: <span>#{data?._id?.slice(0, 8)}</span>
         </h5>
         <h5 className="text-[#00000084]">
-          Ngày tạo: <span>{data?.createAt?.slice(0, 10)}</span>
+          Ngày tạo: <span>{data?.createdAt?.slice(0, 10)}</span>
         </h5>
       </div>
 
@@ -99,14 +102,14 @@ const UserOrderDetails = () => {
                 ${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {item.isReviewed || item.status !== 'Đã giao hàng' ? null : (
+            {!item.isReviewed && data?.status === "Đã giao hàng" ? (
               <div
-                className={`${styles.button} text-white`}
+                className={`${styles.button} text-[#fff]`}
                 onClick={() => setOpen(true) || setSelectedItem(item)}
               >
-                Viết bình luận
+                Viết đánh giá
               </div>
-            )}
+            ) : null}
           </div>
         ))}
       {/* review popup */}
@@ -195,7 +198,7 @@ const UserOrderDetails = () => {
 
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
-          Tổng tiền <strong>${data.totalPrice}</strong>
+          Tổng tiền <strong>${data?.totalPrice}</strong>
         </h5>
       </div>
       <br />
@@ -222,13 +225,14 @@ const UserOrderDetails = () => {
               : "Chưa thanh toán"}
           </h4>
           <br />
-          {
-            data?.status === "Đã giao hàng" && (
-              <div className={`${styles.button} text-white`}
-                onClick={refundHandler}
-              >Hoàn tiền</div>
-            )
-          }
+          {data?.status === "Đã giao hàng" && (
+            <div
+              className={`${styles.button} text-white`}
+              onClick={refundHandler}
+            >
+              Hoàn tiền
+            </div>
+          )}
         </div>
       </div>
       <br />

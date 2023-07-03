@@ -39,7 +39,7 @@ const orderSchema = new mongoose.Schema({
     deliveredAt:{
         type: Date,
     },
-    createAt:{
+    createdAt:{
         type: Date,
         default: Date.now(),
     },

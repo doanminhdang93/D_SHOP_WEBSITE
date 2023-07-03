@@ -332,11 +332,13 @@ const CartData = ({
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">${totalPrice}</h5>
       <br />
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           className={`${styles.input} h-[40px] pl-2`}
           placeholder="Mã giảm giá"
+          value={couponCode}
+          onChange={(e) => setCouponCode(e.target.value)}
           required
         />
         <input
