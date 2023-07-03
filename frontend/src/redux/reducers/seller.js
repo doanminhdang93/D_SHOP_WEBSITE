@@ -5,15 +5,15 @@ const initialState = {
 };
 
 export const sellerReducer = createReducer(initialState,{
-    LoadSellerRequest: (state) =>{
+    loadSellerRequest: (state) =>{
         state.isLoading = true;
     },
-    LoadSellerSuccess: (state,action) =>{
+    loadSellerSuccess: (state,action) =>{
         state.isSeller = true;
         state.isLoading = false;
         state.seller = action.payload;
     },
-    LoadSellerFailure: (state,action) =>{
+    loadSellerFailure: (state,action) =>{
         state.isLoading = false;
         state.error = action.payload;
         state.isSeller = false;

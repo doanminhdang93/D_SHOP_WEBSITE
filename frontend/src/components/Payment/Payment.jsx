@@ -17,7 +17,6 @@ import { RxCross1 } from "react-icons/rx";
 
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
-  const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const stripe = useStripe();
@@ -68,7 +67,7 @@ const Payment = () => {
         toast.error(result.error.message);
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          order.PaymentInfo = {
+          order.paymentInfo = {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
             type: "Thẻ tín dụng",
@@ -76,7 +75,6 @@ const Payment = () => {
           await axios
             .post(`${server}/order/create-order`, order, config)
             .then((res) => {
-                setOpen(false);
                 navigate('/order/success');
                 toast.success("Đơn hàng đã được đặt thành công!");
                 localStorage.setItem('cartItems',JSON.stringify([]));
@@ -106,9 +104,8 @@ const Payment = () => {
     await axios
     .post(`${server}/order/create-order`, order, config)
     .then((res) => {
-      setOpen(false);
       navigate("/order/success");
-      toast.success("Order successful!");
+      toast.success("Đơn hàng đã được đặt thành công!");
       localStorage.setItem("cartItems", JSON.stringify([]));
       localStorage.setItem("latestOrder", JSON.stringify([]));
       window.location.reload();
@@ -121,8 +118,6 @@ const Payment = () => {
         <div className="w-full 800px:w-[65%]">
           <PaymentInfo
             user={user}
-            open={open}
-            setOpen={setOpen}
             createOrder={createOrder}
             paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
@@ -138,8 +133,6 @@ const Payment = () => {
 
 const PaymentInfo = ({
   user,
-  open,
-  setOpen,
   createOrder,
   paymentHandler,
   cashOnDeliveryHandler,

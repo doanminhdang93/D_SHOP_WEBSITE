@@ -12,9 +12,10 @@ import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
-import { MdOutlineTrackChanges } from "react-icons/md";
+import { MdTrackChanges } from "react-icons/md";
 import {
   deleteUserAddress,
+  loadUser,
   updateUserAddress,
   updateUserInformation,
 } from "../../redux/actions/user";
@@ -22,6 +23,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
 import { Country, State } from "country-state-city";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -35,6 +37,7 @@ const ProfileContent = ({ active }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    window.scrollTo(0,0); // go to top of screen
     if (error) {
       toast.error(error);
       dispatch({ type: "clearErrors" });
@@ -65,7 +68,8 @@ const ProfileContent = ({ active }) => {
         withCredentials: true,
       })
       .then((response) => {
-        window.location.reload();
+        dispatch(loadUser());
+        toast.success("Ảnh đại diện được cập nhật thành công!");
       })
       .catch((error) => {
         toast.error(error);
@@ -212,19 +216,14 @@ const ProfileContent = ({ active }) => {
 };
 
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "1434nsajasjq6wf7yasf09032002",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 999,
-      orderStatus: "Đang xử lý",
-    },
-  ];
+  const {orders} = useSelector((state) => state.order);
+  const {user} = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
+  useEffect(()=>{
+    dispatch(getAllOrdersOfUser(user._id))
+  },[])
+  
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
 
@@ -232,7 +231,7 @@ const AllOrders = () => {
       field: "status",
       headerName: "Trạng thái",
       minWidth: 130,
-      flex: 0.7,
+      flex: 0.8,
       cellClassName: (params) => {
         return params.getValue(params.id, "status") === "Đã giao hàng"
           ? "greenColor"
@@ -265,7 +264,7 @@ const AllOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/user/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -282,9 +281,9 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "$" + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 
@@ -302,18 +301,16 @@ const AllOrders = () => {
 };
 
 const AllRefundOrders = () => {
-  const orders = [
-    {
-      _id: "1434nsajasjq6wf7yasf09032002",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 999,
-      orderStatus: "Đang xử lý",
-    },
-  ];
+  const {orders} = useSelector((state) => state.order);
+  const {user} = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getAllOrdersOfUser(user._id))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  
+  const eligibleOrders = orders && orders.filter((item) => item.status === "Đang xử lý việc hoàn tiền");
 
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
@@ -322,7 +319,7 @@ const AllRefundOrders = () => {
       field: "status",
       headerName: "Trạng thái",
       minWidth: 130,
-      flex: 0.7,
+      flex: 0.8,
       cellClassName: (params) => {
         return params.getValue(params.id, "status") === "Đã giao hàng"
           ? "greenColor"
@@ -355,7 +352,7 @@ const AllRefundOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/user/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -367,13 +364,14 @@ const AllRefundOrders = () => {
   ];
 
   const row = [];
-  orders &&
-    orders.forEach((item) => {
+
+  eligibleOrders &&
+  eligibleOrders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "$" + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 
@@ -391,19 +389,14 @@ const AllRefundOrders = () => {
 };
 
 const TrackOrder = () => {
-  const orders = [
-    {
-      _id: "1434nsajasjq6wf7yasf09032002",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 999,
-      orderStatus: "Đang xử lý",
-    },
-  ];
+  const {orders} = useSelector((state) => state.order);
+  const {user} = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
+  useEffect(()=>{
+    dispatch(getAllOrdersOfUser(user._id))
+  },[])
+  
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
 
@@ -411,7 +404,7 @@ const TrackOrder = () => {
       field: "status",
       headerName: "Trạng thái",
       minWidth: 130,
-      flex: 0.7,
+      flex: 0.8,
       cellClassName: (params) => {
         return params.getValue(params.id, "status") === "Đã giao hàng"
           ? "greenColor"
@@ -444,9 +437,9 @@ const TrackOrder = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/user/track-order/${params.id}`}>
               <Button>
-                <MdOutlineTrackChanges size={20} />
+                <MdTrackChanges size={20} />
               </Button>
             </Link>
           </>
@@ -456,13 +449,14 @@ const TrackOrder = () => {
   ];
 
   const row = [];
+
   orders &&
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "$" + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
 

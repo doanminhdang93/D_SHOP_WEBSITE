@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Layout/Header';
 import Footer from '../components/Layout/Footer';
 import styles from '../styles/styles';
@@ -15,6 +15,10 @@ const FAQPage = () => {
   )
 }
 const Faq = () => {
+    useEffect(() => {
+        window.scrollTo(0,0);
+    },[])
+
     const [activeTab,setActiveTab] = useState(0);
     const toggleTab = (tab) =>{
         if(activeTab === tab){

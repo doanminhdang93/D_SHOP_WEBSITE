@@ -24,7 +24,8 @@ const Header = ({ activeHeading }) => {
   const { allProducts } = useSelector((state) => state.products);
   //console.log(allProducts);
   const { cart } = useSelector((state) => state.cart);
-  const {wishlist} = useSelector((state) => state.wishlist);
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const { isSeller } = useSelector((state) => state.seller);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -101,10 +102,10 @@ const Header = ({ activeHeading }) => {
             ) : null}
           </div>
           <div className={`${styles.button}`}>
-            <Link to="/shop-create">
-              <h1 className="text-[#fff] flex items-center ">
-                Kênh người bán{" "}
-                <IoIosArrowForward className="ml-1"></IoIosArrowForward>
+            <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
+              <h1 className="text-[#fff] flex items-center">
+                {isSeller ? "Trang người bán" : "Kênh người bán"}{" "}
+                <IoIosArrowForward className="ml-1" />
               </h1>
             </Link>
           </div>
@@ -309,10 +310,10 @@ const Header = ({ activeHeading }) => {
 
               <NavBar active={activeHeading}></NavBar>
               <div className={`${styles.button} ml-4`}>
-                <Link to="/shop-create">
-                  <h1 className="text-[#fff] flex items-center ">
-                    Kênh người bán{" "}
-                    <IoIosArrowForward className="ml-1"></IoIosArrowForward>
+                <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
+                  <h1 className="text-[#fff] flex items-center">
+                    {isSeller ? "Trang người bán" : "Kênh người bán"}{" "}
+                    <IoIosArrowForward className="ml-1" />
                   </h1>
                 </Link>
               </div>

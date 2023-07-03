@@ -18,6 +18,9 @@ import {
   ShopLoginPage,
   OrderSuccessPage,
   PaymentPage,
+  OrderDetailsPage,
+  TrackOrderPage,
+  UserInbox,
 } from "./routes/Routes.js";
 import {
   ShopHomePage,
@@ -28,6 +31,12 @@ import {
   ShopAllEvents,
   ShopAllCoupons,
   ShopPreviewPage,
+  ShopAllOrders,
+  ShopOrderDetails,
+  ShopAllRefunds,
+  ShopSettingsPage,
+  ShopWithdrawMoneyPage,
+  ShopInboxPage
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -128,6 +137,33 @@ const App = () => {
           }
         ></Route>
 
+        <Route
+          path="/inbox"
+          element={
+            <ProtectedRoute>
+              <UserInbox></UserInbox>
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/user/order/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetailsPage></OrderDetailsPage>
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/user/track-order/:id"
+          element={
+            <ProtectedRoute>
+              <TrackOrderPage></TrackOrderPage>
+            </ProtectedRoute>
+          }
+        ></Route>
+
         {/* Shop Routes */}
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
 
@@ -151,6 +187,15 @@ const App = () => {
         ></Route>
 
         <Route
+          path="/settings"
+          element={
+            <SellerProtectedRoute>
+              <ShopSettingsPage></ShopSettingsPage>
+            </SellerProtectedRoute>
+          }
+        ></Route>
+
+        <Route
           path="/dashboard"
           element={
             <SellerProtectedRoute>
@@ -164,6 +209,33 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopCreateProduct></ShopCreateProduct>
+            </SellerProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/dashboard-orders"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllOrders></ShopAllOrders>
+            </SellerProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/dashboard-refunds"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllRefunds></ShopAllRefunds>
+            </SellerProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/order/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopOrderDetails></ShopOrderDetails>
             </SellerProtectedRoute>
           }
         ></Route>
@@ -200,6 +272,24 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCoupons></ShopAllCoupons>
+            </SellerProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/dashboard-withdraw-money"
+          element={
+            <SellerProtectedRoute>
+              <ShopWithdrawMoneyPage></ShopWithdrawMoneyPage>
+            </SellerProtectedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/dashboard-messages"
+          element={
+            <SellerProtectedRoute>
+              <ShopInboxPage></ShopInboxPage>
             </SellerProtectedRoute>
           }
         ></Route>

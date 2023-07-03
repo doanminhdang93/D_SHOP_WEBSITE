@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import styles from '../../../styles/styles';
-import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
 import ProductDetailsCard from '../ProductDetailsCard/ProductDetailsCard.jsx';
 import { backend_url } from '../../../server';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishlist';
 import { toast } from 'react-toastify';
 import { addToCart } from '../../../redux/actions/cart';
+import Ratings from '../../Products/Ratings';
 
-const ProductCard = ({data}) => {
+const ProductCard = ({data, isEvent}) => {
     const {wishlist} = useSelector((state) => state.wishlist);
     const {cart} = useSelector((state) => state.cart);
     const [click, setClick] = useState(false);
@@ -57,7 +58,7 @@ const ProductCard = ({data}) => {
                 <div className="flex justify-end">
                 </div>
 
-                <Link to={`/product/${data._id}`}>
+                <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
                     <img src={`${backend_url}${data.images && data.images[0]}`} alt=""
                         className='w-full h-[170px] object-contain'
                     />
@@ -69,37 +70,13 @@ const ProductCard = ({data}) => {
                     </h5>
                 </Link>
                 
-                <Link to={`/product/${data._id}`}>
+                <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
                     <h4 className='pb-3 font-[500]'>
                         {data.name.length > 40 ? data.name.slice(0,40) + '...' : data.name}
                     </h4>
 
                     <div className='flex'>
-                        <AiFillStar
-                            className='mr-2 cursor-pointer'
-                            color='#F6BA00'
-                            size={20}
-                        ></AiFillStar>
-                        <AiFillStar
-                            className='mr-2 cursor-pointer'
-                            color='#F6BA00'
-                            size={20}
-                        ></AiFillStar>
-                        <AiFillStar
-                            className='mr-2 cursor-pointer'
-                            color='#F6BA00'
-                            size={20}
-                        ></AiFillStar>
-                        <AiFillStar
-                            className='mr-2 cursor-pointer'
-                            color='#F6BA00'
-                            size={20}
-                        ></AiFillStar>
-                        <AiOutlineStar
-                            className='mr-2 cursor-pointer'
-                            color='#F6BA00'
-                            size={20}
-                        ></AiOutlineStar>
+                        <Ratings rating={data?.ratings}></Ratings>
                     </div>
 
                     <div className="py-2 flex items-center justify-between">
