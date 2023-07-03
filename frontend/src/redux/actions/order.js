@@ -20,6 +20,7 @@ export const getAllOrdersOfUser = (userId) => async(dispatch) =>{
         })
     }
 }
+
 //get all orders of an shop
 export const getAllOrdersOfShop = (shopId) => async(dispatch) =>{
     try{
@@ -35,6 +36,25 @@ export const getAllOrdersOfShop = (shopId) => async(dispatch) =>{
     }catch(err){
         dispatch({
             type: "getAllOrdersShopFailed",
+            payload: err.response.data.message
+        })
+    }
+}
+//get all order of admin
+export const getAllOrdersOfAdmin = () => async(dispatch) =>{
+    try{
+        dispatch({
+            type: "adminAllOrdersRequest",
+        })
+        const {data} = await axios.get(`${server}/order/admin-all-orders`,{withCredentials: true});
+
+        dispatch({
+            type: "adminAllOrdersSuccess",
+            payload: data.orders
+        })
+    }catch(err){
+        dispatch({
+            type: "adminAllOrdersFailed",
             payload: err.response.data.message
         })
     }

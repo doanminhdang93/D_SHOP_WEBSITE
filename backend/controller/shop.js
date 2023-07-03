@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../ultils/sendMail");
 const sendToken = require("../ultils/jwtToken");
 const sendShopToken = require("../ultils/ShopToken");
-const { isSeller } = require("../middleware/auth");
+const { isSeller, isAdmin, isAuthenticated } = require("../middleware/auth");
 const Shop = require("../model/shop");
 const ErrorHandler = require("../ultils/ErrorHandler");
 const { upload } = require("../multer");
@@ -252,5 +252,19 @@ router.put(
   })
 );
 
+//all sellers for admin
+router.get("/admin-all-sellers",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const sellers = await Shop.find().sort({
+      createdAt: -1
+    })
+    res.status(201).json({
+      success: true,
+      sellers
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
 
 module.exports = router;

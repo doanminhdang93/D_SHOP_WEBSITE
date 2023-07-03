@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../ultils/sendMail");
 const sendToken = require("../ultils/jwtToken");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isAdmin } = require("../middleware/auth");
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
@@ -346,4 +346,37 @@ router.get("/user-info/:id",catchAsyncErrors(async(req, res, next) => {
   }
 }))
 
+//all users for admin
+router.get("/admin-all-users",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const users = await User.find().sort({
+      createdAt: -1
+    })
+    res.status(201).json({
+      success: true,
+      users
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
+
+//delete user
+router.delete("/delete-user/:id",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const user = await User.findById(req.params.id);
+    if(!user){
+      return next(new ErrorHandler("Người dùng không đúng với ID này!",400));
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(201).json({
+      success: true,
+      message: "Xoá người dùng thành công!"
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
+
 module.exports = router;
+

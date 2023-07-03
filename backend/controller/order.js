@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const { isAuthenticated, isSeller } = require("../middleware/auth");
+const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 const ErrorHandler = require("../ultils/ErrorHandler");
 const Order = require("../model/order");
 const Product = require("../model/product");
@@ -196,5 +196,21 @@ router.put(
     }
   })
 );
+
+//all orders for admin
+router.get("/admin-all-orders",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const orders = await Order.find().sort({
+      deliveredAt: -1,
+      createdAt: -1
+    })
+    res.status(201).json({
+      success: true,
+      orders
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
 
 module.exports = router;

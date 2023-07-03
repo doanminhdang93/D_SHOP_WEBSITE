@@ -36,8 +36,9 @@ import {
   ShopAllRefunds,
   ShopSettingsPage,
   ShopWithdrawMoneyPage,
-  ShopInboxPage
+  ShopInboxPage,
 } from "./routes/ShopRoutes";
+import { AdminDashboardPage, AdminDashboardUsers } from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
@@ -50,6 +51,7 @@ import axios from "axios";
 import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 
 const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");
@@ -291,6 +293,25 @@ const App = () => {
             <SellerProtectedRoute>
               <ShopInboxPage></ShopInboxPage>
             </SellerProtectedRoute>
+          }
+        ></Route>
+
+        {/* Admin routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage></AdminDashboardPage>
+            </ProtectedAdminRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/admin-users"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardUsers></AdminDashboardUsers>
+            </ProtectedAdminRoute>
           }
         ></Route>
       </Routes>
