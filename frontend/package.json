@@ -59,7 +59,7 @@
     "tailwindcss": "^3.3.1"
   },
    "peerDependencies": {
-     "@types/react": "^17.0.0",
+     "@types/react": "^18.2.0",
       "react": "^17.0.0 || ^18.2.0"
    }
 }
