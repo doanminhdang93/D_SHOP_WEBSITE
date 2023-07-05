@@ -38,7 +38,15 @@ import {
   ShopWithdrawMoneyPage,
   ShopInboxPage,
 } from "./routes/ShopRoutes";
-import { AdminDashboardPage, AdminDashboardUsers } from "./routes/AdminRoutes";
+import {
+  AdminDashboardPage,
+  AdminDashboardUsers,
+  AdminDashboardSellers,
+  AdminDashboardOrders,
+  AdminDashboardProducts,
+  AdminDashboardEvents,
+  AdminDashboardWithdraw
+} from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
@@ -311,6 +319,51 @@ const App = () => {
           element={
             <ProtectedAdminRoute>
               <AdminDashboardUsers></AdminDashboardUsers>
+            </ProtectedAdminRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/admin-sellers"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardSellers></AdminDashboardSellers>
+            </ProtectedAdminRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/admin-orders"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardOrders></AdminDashboardOrders>
+            </ProtectedAdminRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/admin-products"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardProducts></AdminDashboardProducts>
+            </ProtectedAdminRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/admin-events"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardEvents></AdminDashboardEvents>
+            </ProtectedAdminRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/admin-withdraw-request"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardWithdraw></AdminDashboardWithdraw>
             </ProtectedAdminRoute>
           }
         ></Route>

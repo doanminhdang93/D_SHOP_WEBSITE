@@ -310,7 +310,7 @@ const AllRefundOrders = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
-  const eligibleOrders = orders && orders.filter((item) => item.status === "Đang xử lý việc hoàn tiền");
+  const eligibleOrders = orders && orders.filter((item) => item.status === "Đang xử lý việc hoàn tiền" || item.status === "Hoàn tiền thành công");
 
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },

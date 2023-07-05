@@ -1,20 +1,22 @@
 const express = require("express");
 const router = express.Router();
+const ErrorHandler = require("../ultils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
-const ErrorHandler = require("../ultils/ErrorHandler");
 const Order = require("../model/order");
+const Shop = require("../model/shop");
 const Product = require("../model/product");
 
-//create new order
+// create new order
 router.post(
   "/create-order",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
 
-      //group cart items by shopId
+      //   group cart items by shopId
       const shopItemsMap = new Map();
+
       for (const item of cart) {
         const shopId = item.shopId;
         if (!shopItemsMap.has(shopId)) {
@@ -23,8 +25,9 @@ router.post(
         shopItemsMap.get(shopId).push(item);
       }
 
-      //create an order for each shop
+      // create an order for each shop
       const orders = [];
+
       for (const [shopId, items] of shopItemsMap) {
         const order = await Order.create({
           cart: items,
@@ -40,13 +43,13 @@ router.post(
         success: true,
         orders,
       });
-    } catch (err) {
-      return next(new ErrorHandler(err.message, 500));
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
 
-//get all orders of user
+// get all orders of user
 router.get(
   "/get-all-orders/:userId",
   catchAsyncErrors(async (req, res, next) => {
@@ -59,13 +62,13 @@ router.get(
         success: true,
         orders,
       });
-    } catch (err) {
-      return next(new ErrorHandler(err.message, 500));
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
 
-//get all orders of seller
+// get all orders of seller
 router.get(
   "/get-seller-all-orders/:shopId",
   catchAsyncErrors(async (req, res, next) => {
@@ -80,13 +83,13 @@ router.get(
         success: true,
         orders,
       });
-    } catch (err) {
-      return next(new ErrorHandler(err.message, 500));
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
 
-//update order status for seller
+// update order status for seller
 router.put(
   "/update-order-status/:id",
   isSeller,
@@ -95,7 +98,7 @@ router.put(
       const order = await Order.findById(req.params.id);
 
       if (!order) {
-        return next(new ErrorHandler("Không tìm thấy đơn hàng!", 400));
+        return next(new ErrorHandler("Không tìm thấy đơn hàng này!", 400));
       }
       if (req.body.status === "Đã bàn giao cho đơn vị vận chuyển") {
         order.cart.forEach(async (o) => {
@@ -108,29 +111,40 @@ router.put(
       if (req.body.status === "Đã giao hàng") {
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
+        const serviceCharge = order.totalPrice * 0.1;
+        await updateSellerInfo(order.totalPrice - serviceCharge);
       }
 
       await order.save({ validateBeforeSave: false });
 
+      res.status(200).json({
+        success: true,
+        order,
+      });
+
       async function updateOrder(id, qty) {
         const product = await Product.findById(id);
+
         product.stock -= qty;
         product.sold_out += qty;
 
         await product.save({ validateBeforeSave: false });
       }
 
-      res.status(200).json({
-        success: true,
-        order,
-      });
-    } catch (err) {
-      return next(new ErrorHandler(err.message, 500));
+      async function updateSellerInfo(amount) {
+        const seller = await Shop.findById(req.seller.id);
+
+        seller.availableBalance = amount;
+
+        await seller.save();
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
 
-//give a refund --- user
+// give a refund ----- user
 router.put(
   "/order-refund/:id",
   catchAsyncErrors(async (req, res, next) => {
@@ -138,7 +152,7 @@ router.put(
       const order = await Order.findById(req.params.id);
 
       if (!order) {
-        return next(new ErrorHandler("Không tìm thấy đơn hàng!", 400));
+        return next(new ErrorHandler("Không tìm thấy đơn hàng này!", 400));
       }
 
       order.status = req.body.status;
@@ -148,15 +162,15 @@ router.put(
       res.status(200).json({
         success: true,
         order,
-        message: "Yêu cầu hoàn tiền hoá đơn thành công!",
+        message: "Yêu cầu hoàn tiền thành công!",
       });
-    } catch (err) {
-      return next(new ErrorHandler(err.message, 500));
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
 
-//accept the refund --- seller
+// accept the refund ---- seller
 router.put(
   "/order-refund-success/:id",
   isSeller,
@@ -165,7 +179,7 @@ router.put(
       const order = await Order.findById(req.params.id);
 
       if (!order) {
-        return next(new ErrorHandler("Không tìm thấy đơn hàng!", 400));
+        return next(new ErrorHandler("Không tìm thấy đơn hàng này!", 400));
       }
 
       order.status = req.body.status;
@@ -197,20 +211,25 @@ router.put(
   })
 );
 
-//all orders for admin
-router.get("/admin-all-orders",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
-  try{
-    const orders = await Order.find().sort({
-      deliveredAt: -1,
-      createdAt: -1
-    })
-    res.status(201).json({
-      success: true,
-      orders
-    })
-  }catch(err){
-    return next(new ErrorHandler(err.message, 500));
-  }
-}))
+// all orders --- for admin
+router.get(
+  "/admin-all-orders",
+  isAuthenticated,
+  isAdmin("admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const orders = await Order.find().sort({
+        deliveredAt: -1,
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 
 module.exports = router;

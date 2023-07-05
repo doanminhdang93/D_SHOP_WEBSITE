@@ -50,6 +50,34 @@ const shopSchema = new mongoose.Schema({
     required: true,
   },
 
+  withdrawMethod: {
+    type: Object,
+  },
+
+  availableBalance: {
+    type: Number,
+    default: 0,
+  },
+  transactions: [
+    {
+      amount: {
+        type: Number,
+        required: true,
+      },
+      status: {
+        type: String,
+        default: "Đang xử lý",
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now(),
+      },
+      updatedAt: {
+        type: Date,
+      },
+    },
+  ],
+
   createdAt: {
     type: Date,
     default: Date.now(),

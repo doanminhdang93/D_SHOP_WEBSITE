@@ -18,21 +18,19 @@ const AdminDashboardMain = () => {
     (state) => state.order
   );
   const { sellers } = useSelector((state) => state.seller);
-  const [deliveredOrder, setDeliveredOrder] = useState(null);
 
   useEffect(() => {
     dispatch(getAllOrdersOfAdmin());
     dispatch(getAllSellers());
-    const orderData =
-      adminOrders &&
-      adminOrders.filter((item) => item.status === "Đã giao hàng");
-    setDeliveredOrder(orderData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const adminEarning =
-    deliveredOrder ?
-    deliveredOrder.reduce((acc, item) => acc + item.totalPrice * 0.1, 0) : 0;
+  const orderData =
+    adminOrders && adminOrders.filter((item) => item.status === "Đã giao hàng");
+
+  const adminEarning = orderData
+    ? orderData.reduce((acc, item) => acc + item.totalPrice * 0.1, 0)
+    : 0;
 
   const adminBalance = adminEarning?.toFixed(2) || 0;
 

@@ -37,7 +37,7 @@ const ProductsPage = () => {
                 </div>
                 {
                     data && data.length === 0 ? (
-                        <h1 className='text-center w-full pb-[100px] text-[20px]'>
+                        <h1 className='text-center w-full pb-[100px] text-[25px]'>
                             Không tìm thấy sản phẩm nào!
                         </h1>
                     ) : null

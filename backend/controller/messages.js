@@ -28,7 +28,7 @@ router.post(
         conversationId: messageData.conversationId,
         text: messageData.text,
         sender: messageData.sender,
-        images: messageData.images ? messageData.images : undefined,
+        images: messageData.images ? messageData.images : null,
       });
 
       await message.save();

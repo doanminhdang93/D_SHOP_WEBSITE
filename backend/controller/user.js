@@ -361,7 +361,7 @@ router.get("/admin-all-users",isAuthenticated,isAdmin("admin"),catchAsyncErrors(
   }
 }))
 
-//delete user
+//delete user ---admin
 router.delete("/delete-user/:id",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
   try{
     const user = await User.findById(req.params.id);

@@ -267,4 +267,63 @@ router.get("/admin-all-sellers",isAuthenticated,isAdmin("admin"),catchAsyncError
   }
 }))
 
+//delete seller ---admin
+router.delete("/delete-seller/:id",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const seller = await Shop.findById(req.params.id);
+    if(!seller){
+      return next(new ErrorHandler("Người dùng không đúng với ID này!",400));
+    }
+    await Shop.findByIdAndDelete(req.params.id);
+    res.status(201).json({
+      success: true,
+      message: "Xoá người bán thành công!"
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
+
+//update seller withdraw methods --- sellers
+router.put("/update-payment-methods",isSeller,catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const {withdrawMethod} = req.body;
+    const seller = await Shop.findByIdAndUpdate(req.seller._id,{
+      withdrawMethod,
+    })
+    res.status(201).json({
+      success: true,
+      seller,
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
+
+// delete seller withdraw methods --- only seller
+router.delete(
+  "/delete-withdraw-method/",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.seller._id);
+
+      if (!seller) {
+        return next(new ErrorHandler("Không tìm thấy người bán này!", 400));
+      }
+
+      seller.withdrawMethod = null;
+
+      await seller.save();
+
+      res.status(201).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;

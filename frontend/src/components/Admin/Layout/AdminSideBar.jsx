@@ -67,7 +67,7 @@ const AdminSideBar = ({active}) => {
             </div>
 
             <div className='w-full flex items-center p-4'>
-                <Link to='/admin-withdraw-money' className='w-full flex items-center'>
+                <Link to='/admin-withdraw-request' className='w-full flex items-center'>
                     <CiMoneyBill size={30} color={`${active === 7 ? "#88b816" : "#555"}`}></CiMoneyBill>
                     <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 7 ? "text-[#88b816]" : "text-[#555]"}`}>
                         Yêu cầu rút tiền

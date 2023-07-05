@@ -1,16 +1,14 @@
 import React from "react";
 import styles from "../../styles/styles";
-import CountDown from "./CountDown.jsx";
-import { backend_url } from "../../server";
+import CountDown from "./CountDown";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/actions/cart";
-import { useDispatch, useSelector } from "react-redux";
 
 const EventCard = ({ active, data }) => {
-  //console.log(data);
+  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const {cart} = useSelector((state) => state.cart);
 
   const addToCartHandler = (data) => {
     const isItemExists = cart && cart.find((i) => i._id === data._id);
@@ -22,21 +20,20 @@ const EventCard = ({ active, data }) => {
       } else {
         const cartData = { ...data, qty: 1 };
         dispatch(addToCart(cartData));
-        toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng thành công!");
       }
     }
-  };
-
+  }
   return (
     <div
       className={`w-full block bg-white rounded-lg ${
         active ? "unset" : "mb-12"
       } lg:flex p-2`}
     >
-      <div className="w-full lg:w-[50%] m-auto">
-        <img src={`${backend_url}${data?.images[0]}`} alt="" />
+      <div className="w-full lg:-w[50%] m-auto">
+        <img src={`${data?.images[0]?.url}`} alt="" />
       </div>
-      <div className="w-full lg:w-[50%] flex flex-col justify-center">
+      <div className="w-full lg:[w-50%] flex flex-col justify-center">
         <h2 className={`${styles.productTitle}`}>{data?.name}</h2>
         <p>{data?.description}</p>
         <div className="flex py-2 justify-between">
@@ -48,24 +45,17 @@ const EventCard = ({ active, data }) => {
               {data?.discountPrice}$
             </h5>
           </div>
-
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            120 đã bán
+            {data?.sold_out} Đã bán
           </span>
         </div>
-
-        <CountDown data={data}></CountDown>
+        <CountDown data={data} />
         <br />
         <div className="flex items-center">
-          <Link to={`/product/${data._id}?isEvent=true`}>
-            <div className={`${styles.button} text-white`}>Xem chi tiết</div>
+          <Link to={`/product/${data?._id}?isEvent=true`}>
+            <div className={`${styles.button} text-[#fff]`}>Xem chi tiết</div>
           </Link>
-          <div
-            className={`${styles.button} text-white ml-5`}
-            onClick={() => addToCartHandler(data)}
-          >
-            Thêm vào giỏ
-          </div>
+          <div className={`${styles.button} text-[#fff] ml-5`} onClick={() => addToCartHandler(data)}>Thêm vào giỏ</div>
         </div>
       </div>
     </div>

@@ -17,24 +17,14 @@ const DashboardMain = () => {
   const { seller } = useSelector((state) => state.seller);
   const { orders } = useSelector((state) => state.order);
   const { products } = useSelector((state) => state.products);
-  const [deliveredOrder, setDeliveredOrder] = useState(null);
 
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
     dispatch(getAllProductsShop(seller._id));
-
-    const orderData =
-      orders && orders.filter((item) => item.status === "Đã giao hàng");
-    setDeliveredOrder(orderData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  const totalEarningWithoutTax =
-    deliveredOrder ?
-    deliveredOrder.reduce((acc, item) => acc + item.totalPrice, 0) : 0;
-
-  const serviceCharge = (totalEarningWithoutTax * 0.1) || 0;
-  const availableBalance = (totalEarningWithoutTax - serviceCharge).toFixed(2) || 0;
+  const availableBalance = seller?.availableBalance.toFixed(2);
 
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
@@ -76,7 +66,7 @@ const DashboardMain = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/dashboard/order/${params.id}`}>
+            <Link to={`/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>

@@ -5,7 +5,7 @@ const ErrorHandler = require("../ultils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop");
 const { upload } = require("../multer");
-const { isSeller, isAuthenticated } = require("../middleware/auth");
+const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 const fs = require("fs");
 const Order = require("../model/order");
 
@@ -18,7 +18,7 @@ router.post(
       const shopId = req.body.shopId;
       const shop = await Shop.findById(shopId);
       if (!shop) {
-        return next(new ErrorHandler("Shop ID is invalid!", 400));
+        return next(new ErrorHandler("Không tìm thấy cửa hàng!", 400));
       } else {
         const files = req.files;
         const imageUrls = files.map((file) => `${file.filename}`);
@@ -166,5 +166,19 @@ router.put(
   })
 );
 
+//all products for admin
+router.get("/admin-all-products",isAuthenticated,isAdmin("admin"),catchAsyncErrors(async(req,res,next)=>{
+  try{
+    const products = await Product.find().sort({
+      createdAt: -1
+    })
+    res.status(201).json({
+      success: true,
+      products
+    })
+  }catch(err){
+    return next(new ErrorHandler(err.message, 500));
+  }
+}))
 
 module.exports = router;

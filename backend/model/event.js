@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const eventSchema = new mongoose.Schema({
     name:{
         type: String,
-        required: [true,"Vui lòng nhập tên sự kiện của sản phẩm!"],
+        required: [true,"Vui lòng nhập tên sản phẩm có trong sự kiện!"],
     },
     description:{
         type: String,
@@ -37,7 +37,7 @@ const eventSchema = new mongoose.Schema({
     },
     status:{
         type: String,
-        default: 'Running',
+        default: 'Đang diễn ra',
     },
     images:[
         {

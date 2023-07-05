@@ -87,13 +87,13 @@ const Header = ({ activeHeading }) => {
                   searchData.map((i) => {
                     return (
                       <Link to={`/product/${i._id}`}>
-                        <div className="w-full flex item-start-py-3">
+                        <div className="w-full flex items-start py-3">
                           <img
-                            src={`${backend_url}${i.images[0]}`}
+                            src={`${backend_url}${i?.images[0]}`}
                             alt=""
                             className="w-[40px] h-[40px] mr-[10px]"
                           />
-                          <h1>{i.name}</h1>
+                          <h1>{i?.name}</h1>
                         </div>
                       </Link>
                     );
@@ -237,7 +237,10 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           <div>
-            <div className="relative mr-[20px]">
+            <div
+              className="relative mr-[20px]"
+              onClick={() => setOpenCart(true) || setOpen(false)}
+            >
               <AiOutlineShoppingCart
                 size={30}
                 className="cursor-pointer"
@@ -247,21 +250,30 @@ const Header = ({ activeHeading }) => {
               </span>
             </div>
           </div>
+          {/* Cart popup */}
+          {openCart ? <Cart setOpenCart={setOpenCart}></Cart> : null}
+          {/* Wishlist popup */}
+          {openWishlist ? (
+            <WishList setOpenWishList={setOpenWishlist}></WishList>
+          ) : null}
         </div>
 
         {/* Header Sidebar */}
         {open && (
           <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0">
-            <div className="fixed w-[60%] bg-white h-screen top-0 left-0 z-10 overflow-y-scroll">
+            <div className="fixed w-[70%] bg-white h-screen top-0 left-0 z-10 overflow-y-scroll">
               <div className="w-full flex justify-between pr-3">
                 <div>
-                  <div className="relative mr-[15px]">
+                  <div
+                    className="relative mr-[15px]"
+                    onClick={() => setOpenWishlist(true) || setOpen(false)}
+                  >
                     <AiOutlineHeart
                       size={30}
                       className="mt-5 ml-3 cursor-pointer"
                     ></AiOutlineHeart>
                     <span className="absolute right-0 top-0 rounded-full bg-[#3BC177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-right text-center">
-                      1
+                      {wishlist && wishlist.length}
                     </span>
                   </div>
                 </div>
@@ -289,17 +301,15 @@ const Header = ({ activeHeading }) => {
                   <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                     {searchData &&
                       searchData.map((i) => {
-                        const d = i.name;
-                        const Product_name = d.replace(/\s+/g, "-");
                         return (
-                          <Link to={`/product/${Product_name}`}>
-                            <div className="w-full flex item-start-py-3">
+                          <Link to={`/product/${i?._id}`}>
+                            <div className="w-full flex items-start py-3">
                               <img
-                                src={i.image_Url[0].url}
+                                src={`${backend_url}${i?.images[0]}`}
                                 alt=""
                                 className="w-[40px] h-[40px] mr-[10px]"
                               />
-                              <h1>{i.name}</h1>
+                              <h1>{i?.name}</h1>
                             </div>
                           </Link>
                         );
