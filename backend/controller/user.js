@@ -47,7 +47,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `https://e-commerse-website-hnzgwv9bs-doanminhdang93.vercel.app/activation/${activationToken}`;
+    const activationUrl = `https://e-commerse-website-ashen.vercel.app/activation/${activationToken}`;
 
     try {
       await sendMail({
