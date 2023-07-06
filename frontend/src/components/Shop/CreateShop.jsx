@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../../styles/styles.js"
+import styles from "../../styles/styles.js";
 import { Link } from "react-router-dom";
 import { server } from "../../server.js";
 import axios from "axios";
@@ -8,47 +8,54 @@ import { toast } from "react-toastify";
 import { RxAvatar } from "react-icons/rx";
 
 const CreateShop = () => {
-  const [name,setName] = useState("");  
-  const [phoneNumber,setPhoneNumber] = useState("");
-  const [zipCode,setZipCode] = useState();
-  const [address,setAddress] = useState("");
-
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [zipCode, setZipCode] = useState();
+  const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
 
-  const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = {headers: {"Content-Type": "multipart/form-data"}};
 
-    const newForm = new FormData();
-    newForm.append("file",avatar);
-    newForm.append("name",name);
-    newForm.append("email",email);
-    newForm.append("password",password);
-    newForm.append("zipCode",zipCode);
-    newForm.append("address",address);
-    newForm.append("phoneNumber",phoneNumber);
+    axios
+      .post(`${server}/shop/create-shop`, {
+        name,
+        email,
+        password,
+        avatar,
+        zipCode,
+        address,
+        phoneNumber,
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar();
+        setZipCode();
+        setAddress("");
+        setPhoneNumber();
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
 
-    axios.post(`${server}/shop/create-shop`,newForm, config).then((res) => {
-      toast.success(res.data.message);
-      setName("");
-      setEmail("");
-      setPassword("");
-      setAvatar();
-      setAddress("");
-      setPhoneNumber("");
-      setZipCode();
-    }).catch((err) => {
-      toast.error(err.response.data.message);
-    });
-  }
+  const handleFileInputChange = (e) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -77,7 +84,7 @@ const CreateShop = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-            </div>    
+            </div>
 
             <div>
               <label
@@ -97,7 +104,7 @@ const CreateShop = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-            </div>    
+            </div>
 
             <div>
               <label
@@ -117,7 +124,7 @@ const CreateShop = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-            </div>    
+            </div>
 
             <div>
               <label
@@ -189,7 +196,6 @@ const CreateShop = () => {
                   ></AiOutlineEyeInvisible>
                 )}
               </div>
-
             </div>
 
             <div>
@@ -217,7 +223,7 @@ const CreateShop = () => {
                   <input
                     type="file"
                     required
-                    name="avatar" 
+                    name="avatar"
                     id="file-input"
                     accept=".jpg,.png,.jpeg"
                     onChange={handleFileInputChange}
@@ -228,12 +234,19 @@ const CreateShop = () => {
             </div>
 
             <div>
-              <button type="submit" className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">Đăng ký</button>
+              <button
+                type="submit"
+                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+              >
+                Đăng ký
+              </button>
             </div>
 
             <div className={`${styles.noramFlex} w-full`}>
               <h4>Đã có tài khoản?</h4>
-              <Link to="/shop-login" className="text-blue-600 pl-2">Đăng nhập</Link>
+              <Link to="/shop-login" className="text-blue-600 pl-2">
+                Đăng nhập
+              </Link>
             </div>
           </form>
         </div>

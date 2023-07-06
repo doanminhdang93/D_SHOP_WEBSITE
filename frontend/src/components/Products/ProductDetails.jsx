@@ -123,7 +123,7 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${backend_url}${data && data.images[select]}`}
+                  src={`${data && data.images[select]?.url}`}
                   alt=""
                   className="w-[80%]"
                 ></img>
@@ -137,7 +137,7 @@ const ProductDetails = ({ data }) => {
                         } cursor-pointer`}
                       >
                         <img
-                          src={`${backend_url}${i}`}
+                          src={`${i?.url}`}
                           alt=""
                           className="h-[200px] overflow-hidden mr-3 mt-3"
                           onClick={() => setSelect(index)}
@@ -221,7 +221,7 @@ const ProductDetails = ({ data }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={`${data?.shop?.avatar?.url}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -328,7 +328,7 @@ const ProductDetailsInfo = ({
             data.reviews.map((item) => (
               <div className="w-full flex my-2" key={item._id}>
                 <img
-                  src={`${backend_url}/${item.user.avatar}`}
+                  src={`${item.user.avatar?.url}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
@@ -352,7 +352,7 @@ const ProductDetailsInfo = ({
           <div className="w-full 800px:w-[50%]">
             <div className="flex items-center">
               <img
-                src={`${backend_url}${data?.shop.avatar}`}
+                src={`${data?.shop?.avatar?.url}`}
                 alt=""
                 className="w-[50px] h-[50px] rounded-full"
               />

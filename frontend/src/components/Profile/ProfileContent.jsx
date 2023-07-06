@@ -37,7 +37,7 @@ const ProfileContent = ({ active }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    window.scrollTo(0,0); // go to top of screen
+    window.scrollTo(0, 0); // go to top of screen
     if (error) {
       toast.error(error);
       dispatch({ type: "clearErrors" });
@@ -55,25 +55,30 @@ const ProfileContent = ({ active }) => {
   };
 
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
+    const reader = new FileReader();
 
-    await axios
-      .put(`${server}/user/update-avatar`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        dispatch(loadUser());
-        toast.success("Ảnh đại diện được cập nhật thành công!");
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+        axios
+          .put(
+            `${server}/user/update-avatar`,
+            { avatar: reader.result },
+            {
+              withCredentials: true,
+            }
+          )
+          .then((response) => {
+            dispatch(loadUser());
+            toast.success("Cập nhật ảnh đại diện thành công!");
+          })
+          .catch((error) => {
+            toast.error(error);
+          });
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
@@ -84,7 +89,7 @@ const ProfileContent = ({ active }) => {
           <div className="flex justify-center w-full">
             <div className="relative">
               <img
-                src={`${backend_url}${user?.avatar}`}
+                src={`${user?.avatar?.url}`}
                 className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
                 alt=""
               />
@@ -216,14 +221,14 @@ const ProfileContent = ({ active }) => {
 };
 
 const AllOrders = () => {
-  const {orders} = useSelector((state) => state.order);
-  const {user} = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getAllOrdersOfUser(user._id))
-  },[])
-  
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, []);
+
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
 
@@ -301,16 +306,22 @@ const AllOrders = () => {
 };
 
 const AllRefundOrders = () => {
-  const {orders} = useSelector((state) => state.order);
-  const {user} = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getAllOrdersOfUser(user._id))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  
-  const eligibleOrders = orders && orders.filter((item) => item.status === "Đang xử lý việc hoàn tiền" || item.status === "Hoàn tiền thành công");
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const eligibleOrders =
+    orders &&
+    orders.filter(
+      (item) =>
+        item.status === "Đang xử lý việc hoàn tiền" ||
+        item.status === "Hoàn tiền thành công"
+    );
 
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
@@ -366,7 +377,7 @@ const AllRefundOrders = () => {
   const row = [];
 
   eligibleOrders &&
-  eligibleOrders.forEach((item) => {
+    eligibleOrders.forEach((item) => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
@@ -389,14 +400,14 @@ const AllRefundOrders = () => {
 };
 
 const TrackOrder = () => {
-  const {orders} = useSelector((state) => state.order);
-  const {user} = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getAllOrdersOfUser(user._id))
-  },[])
-  
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, []);
+
   const columns = [
     { field: "id", headerName: "Mã đơn hàng", minWidth: 150, flex: 0.7 },
 
@@ -797,9 +808,7 @@ const Address = () => {
               <h5 className="pl-5 font-[600]">{item.addressType}</h5>
             </div>
             <div className="pl-8 flex items-center">
-              <h6>
-                (+{item.zipCode})
-              </h6>
+              <h6>(+{item.zipCode})</h6>
             </div>
             <div className="pl-8 flex items-center">
               <h6>{user && user.phoneNumber}</h6>

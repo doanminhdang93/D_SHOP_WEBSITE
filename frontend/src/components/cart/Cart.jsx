@@ -125,7 +125,7 @@ const CartSingle = ({data,quantityChangeHandler,removeFromCartHandler}) =>{
                         <HiOutlineMinus size={16} color='#7d879c'></HiOutlineMinus>
                     </div>
                 </div>
-                <img src={`${backend_url}${data?.images[0]}`} alt='' className='w-[130px] h-min ml-2 mr-2 rounded-[5px]'/>  
+                <img src={`${data?.images[0]?.url}`} alt='' className='w-[130px] h-min ml-2 mr-2 rounded-[5px]'/>  
                 <div className='pl-[5px]'>
                     <h1>{data.name}</h1>
                     <h4 className='font-[400] text-[15px] text-[#00000082]'>${data.discountPrice} * {value}</h4>

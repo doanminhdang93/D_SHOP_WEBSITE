@@ -2,19 +2,18 @@ import axios from 'axios';
 import {server} from '../../server';
 
 //create event
-export const createEvent = (newForm) => async (dispatch) =>{
+export const createEvent = (data) => async (dispatch) =>{
     try{
         dispatch({
             type: "eventCreateRequest",
         });
 
-        const config = {headers: {"Content-Type":"multipart/form-data"}};
 
-        const {data} = await axios.post(`${server}/event/create-event`,newForm,config);
+        const {d} = await axios.post(`${server}/event/create-event`,data);
 
         dispatch({
             type: "eventCreateSuccess",
-            payload: data.event,
+            payload: d.event,
         });
         
     }catch(err){
@@ -46,7 +45,7 @@ export const getAllEventsShop = (id) => async(dispatch) => {
 }
 
 //Get all events 
-export const getAllEvents = (id) => async(dispatch) => {
+export const getAllEvents = () => async(dispatch) => {
     try{
         dispatch({
             type: "getAllEventsRequest",

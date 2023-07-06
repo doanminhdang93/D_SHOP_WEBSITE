@@ -1,76 +1,83 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: [true,"Vui lòng nhập tên sản phẩm!"],
-    },
-    description:{
-        type: String,
-        required: [true,"Vui lòng nhập mô tả sản phẩm!"],
-    },
-    category:{
-        type: String,
-        required: [true,"Vui lòng chọn loại sản phẩm!"],
-    },
-    tags:{
-        type: String,
-    },
-    originalPrice:{
-        type: Number,
-    },
-    discountPrice:{
-        type: Number,
-        required: [true,"Vui lòng nhập giá sản phẩm!"],
-    },
-    stock:{
-        type: Number,
-        required: [true,"Vui lòng nhập số lượng sản phẩm còn trong kho!"],
-    },
-    images:[
-        {
-            type: String,
-        },
-    ],
-    reviews:[
-        {
-            user:{
-                type: Object,
-            },
-            rating:{
-                type: Number,
-            },
-            comment:{
-                type: String,
-            },
-            productId:{
-                type: String,
-            },
-            createdAt:{
-                type: Date,
-                default: Date.now(),
-            }
-        }
-    ],
-    ratings:{
-        type: Number,
-    },
-    shopId:{
+  name: {
+    type: String,
+    required: [true, "Vui lòng nhập tên sản phẩm!"],
+  },
+  description: {
+    type: String,
+    required: [true, "Vui lòng nhập mô tả sản phẩm!"],
+  },
+  category: {
+    type: String,
+    required: [true, "Vui lòng chọn loại sản phẩm!"],
+  },
+  tags: {
+    type: String,
+  },
+  originalPrice: {
+    type: Number,
+  },
+  discountPrice: {
+    type: Number,
+    required: [true, "Vui lòng nhập giá sản phẩm!"],
+  },
+  stock: {
+    type: Number,
+    required: [true, "Vui lòng nhập số lượng sản phẩm còn trong kho!"],
+  },
+  images: [
+    {
+      public_id: {
         type: String,
         required: true,
-    },
-    shop:{
-        type:Object,
+      },
+      url: {
+        type: String,
         required: true,
+      },
     },
-    sold_out:{
+  ],
+  reviews: [
+    {
+      user: {
+        type: Object,
+      },
+      rating: {
         type: Number,
-        default: 0,
-    },
-    createdAt:{
+      },
+      comment: {
+        type: String,
+      },
+      productId: {
+        type: String,
+      },
+      createdAt: {
         type: Date,
         default: Date.now(),
-    }
-})
+      },
+    },
+  ],
+  ratings: {
+    type: Number,
+  },
+  shopId: {
+    type: String,
+    required: true,
+  },
+  shop: {
+    type: Object,
+    required: true,
+  },
+  sold_out: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+});
 
-module.exports = mongoose.model('Product',productSchema);
+module.exports = mongoose.model("Product", productSchema);

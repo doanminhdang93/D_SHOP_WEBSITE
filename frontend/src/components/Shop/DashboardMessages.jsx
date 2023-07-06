@@ -1,19 +1,19 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
-import { backend_url, server } from "../../server";
-import { useSelector } from "react-redux";
+import { server } from "../../server";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { TfiGallery } from "react-icons/tfi";
 import socketIO from "socket.io-client";
 import { format } from "timeago.js";
-const ENDPOINT = "https://socket-d-shop.onrender.com/";
+const ENDPOINT = "https://socket-ecommerce-tu68.onrender.com/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const DashboardMessages = () => {
-  const { seller } = useSelector((state) => state.seller);
+  const { seller, isLoading } = useSelector((state) => state.seller);
   const [conversations, setConversations] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentChat, setCurrentChat] = useState();
@@ -45,14 +45,14 @@ const DashboardMessages = () => {
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const response = await axios.get(
-          `${server}/conversation/get-all-conversations-seller/${seller?._id}`,
+        const resonse = await axios.get(
+          `${server}/conversation/get-all-conversation-seller/${seller?._id}`,
           {
             withCredentials: true,
           }
         );
 
-        setConversations(response.data.conversations);
+        setConversations(resonse.data.conversations);
       } catch (error) {
         // console.log(error);
       }
@@ -150,20 +150,19 @@ const DashboardMessages = () => {
   };
 
   const handleImageUpload = async (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    setImages(file);
-    imageSendingHandler(file);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImages(reader.result);
+        imageSendingHandler(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   const imageSendingHandler = async (e) => {
-    const formData = new FormData();
-
-    formData.append("images", e);
-    formData.append("sender", seller._id);
-    formData.append("text", newMessage);
-    formData.append("conversationId", currentChat._id);
-
     const receiverId = currentChat.members.find(
       (member) => member !== seller._id
     );
@@ -176,10 +175,11 @@ const DashboardMessages = () => {
 
     try {
       await axios
-        .post(`${server}/message/create-new-message`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+        .post(`${server}/message/create-new-message`, {
+          images: e,
+          sender: seller._id,
+          text: newMessage,
+          conversationId: currentChat._id,
         })
         .then((res) => {
           setImages();
@@ -210,7 +210,7 @@ const DashboardMessages = () => {
       {!open && (
         <>
           <h1 className="text-center text-[30px] py-3 font-Poppins">
-            Tất cả tin nhắn
+            All Messages
           </h1>
           {/* All messages list */}
           {conversations &&
@@ -226,6 +226,7 @@ const DashboardMessages = () => {
                 userData={userData}
                 online={onlineCheck(item)}
                 setActiveStatus={setActiveStatus}
+                isLoading={isLoading}
               />
             ))}
         </>
@@ -259,8 +260,9 @@ const MessageList = ({
   setUserData,
   online,
   setActiveStatus,
+  isLoading,
 }) => {
-  //console.log(data);
+  console.log(data);
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
   const handleClick = (id) => {
@@ -298,22 +300,22 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${backend_url}${user?.avatar}`}
+          src={`${user?.avatar?.url}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
         {online ? (
-          <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute bottom-[2px] right-[2px]" />
+          <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
         ) : (
-          <div className="w-[12px] h-[12px] bg-[#c7b9b9] rounded-full absolute bottom-[2px] right-[2px]" />
+          <div className="w-[12px] h-[12px] bg-[#c7b9b9] rounded-full absolute top-[2px] right-[2px]" />
         )}
       </div>
       <div className="pl-3">
         <h1 className="text-[18px]">{user?.name}</h1>
         <p className="text-[16px] text-[#000c]">
-          {data?.lastMessageId !== user?._id
+          {!isLoading && data?.lastMessageId !== user?._id
             ? "Bạn:"
-            : user?.name?.split(" ")[0] + ": "}{" "}
+            : user?.name.split(" ")[0] + ": "}{" "}
           {data?.lastMessage}
         </p>
       </div>
@@ -339,7 +341,7 @@ const SellerInbox = ({
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
           <img
-            src={`${backend_url}${userData?.avatar}`}
+            src={`${userData?.avatar?.url}`}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
           />
@@ -368,15 +370,15 @@ const SellerInbox = ({
               >
                 {item.sender !== sellerId && (
                   <img
-                    src={`${backend_url}${userData?.avatar}`}
+                    src={`${userData?.avatar?.url}`}
                     className="w-[40px] h-[40px] rounded-full mr-3"
                     alt=""
                   />
                 )}
                 {item.images && (
                   <img
-                    src={`${backend_url}${item.images}`}
-                    className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2 mb-2"
+                    src={`${item.images?.url}`}
+                    className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
                     alt=""
                   />
                 )}
@@ -384,14 +386,14 @@ const SellerInbox = ({
                   <div>
                     <div
                       className={`w-max p-2 rounded ${
-                        item.sender === sellerId ? "bg-[#000]" : "bg-[#38c776]"
+                        item?.sender === sellerId ? "bg-[#000]" : "bg-[#38c776]"
                       } text-[#fff] h-min`}
                     >
-                      <p>{item.text}</p>
+                      <p>{item?.text}</p>
                     </div>
 
                     <p className="text-[12px] text-[#000000d3] pt-1">
-                      {format(item.createdAt)}
+                      {format(item?.createdAt)}
                     </p>
                   </div>
                 )}

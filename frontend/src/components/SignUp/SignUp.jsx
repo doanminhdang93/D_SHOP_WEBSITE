@@ -9,47 +9,47 @@ import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = {headers: {"Content-Type": "multipart/form-data"}};
 
-    const newForm = new FormData();
-    newForm.append("file",avatar);
-    newForm.append("name",name);
-    newForm.append("email",email);
-    newForm.append("password",password);
-    newForm.append("phoneNumber",phoneNumber);
-
-    axios.post(`${server}/user/create-user`,newForm, config).then((res) => {
-      toast.success(res.data.message);
-      setName("");
-      setEmail("");
-      setPassword("");
-      setAvatar();
-      setPhoneNumber("");
-    }).catch((err) => {
-      toast.error(err.response.data.message);
-    });
+    axios
+      .post(`${server}/user/create-user`, { name, email, password, phoneNumber, avatar })
+      .then((res) => {
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setPhoneNumber("");
+        setAvatar();
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   };
- 
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Đăng ký 
+          Đăng ký
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -157,7 +157,7 @@ const SignUp = () => {
                 <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
                   {avatar ? (
                     <img
-                      src={URL.createObjectURL(avatar)}
+                      src={avatar}
                       alt="avatar"
                       className="h-full w-full object-cover rounded-full"
                     />
@@ -172,7 +172,7 @@ const SignUp = () => {
                   <span className="cursor-pointer">Tải lên file</span>
                   <input
                     type="file"
-                    name="avatar" 
+                    name="avatar"
                     id="file-input"
                     accept=".jpg,.png,.jpeg"
                     onChange={handleFileInputChange}
