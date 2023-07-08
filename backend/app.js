@@ -13,13 +13,14 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+
 app.use(cookieParser());
 // app.use("/", express.static(path.join(__dirname,"./uploads")));
 app.use("/test",(req, res) => {
   res.send("Hello world!");
 })
-app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(bodyParser.json({ limit: "200mb" }));
+app.use(bodyParser.urlencoded({ limit: "200mb",  extended: true, parameterLimit: 1000000 }));
 
 //config
 if (process.env.NODE_ENV !== "PRODUCTION") {
