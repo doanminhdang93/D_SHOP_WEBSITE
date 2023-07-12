@@ -42,7 +42,7 @@ router.post("/create-user", async (req, res, next) => {
     try {
       await sendMail({
         email: user.email,
-        subject: "Kích hoạt tài khoản của bạn",
+        subject: "Kích hoạt tài khoản",
         message: `Xin chào ${user.name}, Vui lòng bấm vào đường link để kích hoạt tài khoản của bạn: ${activationUrl}`,
       });
       res.status(201).json({
@@ -261,7 +261,7 @@ router.put(
         (address) => address.addressType === req.body.addressType
       );
       if (sameTypeAddress) {
-        return next(new ErrorHandler(`${req.body.addressType} đã tồn tại!`));
+        return next(new ErrorHandler(`${req.body.addressType} đã tồn tại!`,400));
       }
 
       const existsAddress = user.addresses.find(

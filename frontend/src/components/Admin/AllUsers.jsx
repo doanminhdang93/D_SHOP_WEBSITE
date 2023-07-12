@@ -83,8 +83,11 @@ const AllUsers = () => {
   ];
 
   const row = [];
-  users &&
-    users.forEach((item) => {
+
+  const usersNotAdmin = users && users.filter((user) => user.role === "user");
+
+  usersNotAdmin &&
+  usersNotAdmin.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AiOutlineCamera,
@@ -58,6 +58,7 @@ const ProfileContent = ({ active }) => {
     const reader = new FileReader();
 
     reader.onload = () => {
+      //console.log(reader.result);
       if (reader.readyState === 2) {
         setAvatar(reader.result);
         axios
@@ -227,6 +228,7 @@ const AllOrders = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [
@@ -653,7 +655,7 @@ const Address = () => {
     <div className="w-full px-5">
       {open && (
         <div className="fixed w-full h-screen bg-[#0000004b] top-0 left-0 flex items-center justify-center">
-          <div className="w-[35%] bg-white rounded shadow relative overflow-y-scroll">
+          <div className="800px:w-[40%] w-[80%] h-[85vh] bg-white rounded shadow relative overflow-y-scroll">
             <div className="w-full flex justify-end">
               <RxCross1
                 size={30}
@@ -672,7 +674,7 @@ const Address = () => {
                     <select
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
+                      className="w-full border h-[40px] rounded-[5px]"
                     >
                       <option value="" className="block pb-2">
                         Chọn quốc gia
@@ -695,7 +697,7 @@ const Address = () => {
                     <select
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
+                      className="w-full border h-[40px] rounded-[5px]"
                     >
                       <option value="" className="block border pb-2">
                         Chọn thành phố
@@ -753,7 +755,7 @@ const Address = () => {
                       id=""
                       value={addressType}
                       onChange={(e) => setAddressType(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
+                      className="w-full border h-[40px] rounded-[5px]"
                     >
                       <option value="" className="block border pb-2">
                         Chọn loại địa chỉ
@@ -802,7 +804,7 @@ const Address = () => {
         user.addresses.map((item, index) => (
           <div
             key={index}
-            className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10"
+            className="w-full bg-white h-[70px] rounded-[4px] flex items-center mb-3 px-3 shadow justify-between pr-10"
           >
             <div className="flex items-center">
               <h5 className="pl-5 font-[600]">{item.addressType}</h5>
@@ -811,11 +813,11 @@ const Address = () => {
               <h6>(+{item.zipCode})</h6>
             </div>
             <div className="pl-8 flex items-center">
-              <h6>{user && user.phoneNumber}</h6>
+              <h6 className="text-[10px] 800px:text-[15px]">{user && user.phoneNumber}</h6>
             </div>
             <div className="pl-8 flex items-center">
-              <h6>
-                {item.address1} + {item.address2}
+              <h6 className="text-[10px] 800px:text-[15px]">
+                {item.address1} {item.address2}
               </h6>
             </div>
             <div className="min-w-[10%] flex items-center justify-between pl-8">

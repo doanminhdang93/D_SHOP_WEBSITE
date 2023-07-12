@@ -5,8 +5,8 @@ import { getAllProductsShop } from "../../redux/actions/product";
 import styles from "../../styles/styles";
 import ProductCard from "../Route/ProductCard/ProductCard";
 import { getAllEventsShop } from "../../redux/actions/event";
-import { backend_url } from "../../server";
 import Ratings from "../Products/Ratings";
+import {format} from "timeago.js";
 
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
@@ -118,7 +118,9 @@ const ShopProfileData = ({ isOwner }) => {
                     <Ratings rating={item.rating} />
                   </div>
                   <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
-                  <p className="text-[#000000a7] text-[14px]">{"2 ngày trước"}</p>
+                  <p className="text-[#000000a7] text-[14px]">
+                    {format(item?.createdAt)}
+                  </p>
                 </div>
               </div>
             ))}

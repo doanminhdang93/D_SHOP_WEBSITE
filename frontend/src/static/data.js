@@ -27,7 +27,7 @@ export const brandingData = [
   {
     id: 1,
     title: "Miễn phí vận chuyển",
-    Description: "Cho mọi hoá đơn trên 100$",
+    Description: "Cho mọi hoá đơn trên 1000$",
     icon: (
       <svg
         width="36"

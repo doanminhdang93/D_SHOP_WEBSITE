@@ -3,15 +3,18 @@ import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
 import { format } from "timeago.js";
-import { backend_url, server } from "../server";
+import { server } from "../server";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import { TfiGallery } from "react-icons/tfi";
 import styles from "../styles/styles";
-//const ENDPOINT = "https://socket-d-shop.onrender.com/";
-const ENDPOINT = "http://localhost:4000/";
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
+const ENDPOINT = "https://socket-d-shop.onrender.com/";
+//const ENDPOINT = "http://localhost:4000/";
+const socketId = socketIO(
+  ENDPOINT,
+  { transports: ["websocket"] },
+);
 
 const UserInbox = () => {
   const { user } = useSelector((state) => state.user);
@@ -55,7 +58,7 @@ const UserInbox = () => {
 
         setConversations(response.data.conversations);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     };
     getConversation();
@@ -63,8 +66,8 @@ const UserInbox = () => {
 
   useEffect(() => {
     if (user) {
-      const sellerId = user?._id;
-      socketId.emit("addUser", sellerId);
+      const userId = user?._id;
+      socketId.emit("addUser", userId);
       socketId.on("getUsers", (data) => {
         setOnlineUsers(data);
       });
@@ -418,12 +421,12 @@ const SellerInbox = ({
           <input
             type="text"
             required
-            placeholder="Enter your message..."
+            placeholder="Nhập tin nhắn..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             className={`${styles.input}`}
           />
-          <input type="submit" value="Send" className="hidden" id="send" />
+          <input type="submit" value="send" className="hidden" id="send" />
           <label htmlFor="send">
             <AiOutlineSend
               size={20}

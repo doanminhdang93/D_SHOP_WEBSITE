@@ -14,7 +14,7 @@ const Hero = () => {
                         Khoác lên Galaxy S23 Ultra là lớp kính tái chế và phim phủ PET không chỉ lộng lẫy ở mọi góc cạnh 
                         mà còn giúp siêu phẩm di động nổi bật khác biệt với tuyên ngôn sống xanh đột phá.
                     </p>
-                    <Link to="/products" className="inline-block">
+                    <Link to="/product/64ad00a68c5a3ce5efbd6da1" className="inline-block">
                         <div className={`${styles.button} mt-5`}>
                             <span className="text-[#fff] font-[Poppins] text-[18px]">
                                 Mua ngay
@@ -23,7 +23,7 @@ const Hero = () => {
                     </Link>
                 </div>
                 <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-                    <img src={require("../../../static/images/S23.png")} alt="" />
+                    <img src={require("../../../static/images/S23ultra.png")} alt="" />
                 </div>                
             </div>
         </section>

@@ -18,7 +18,7 @@ export const loadUser = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: "loadUserFailure",
-      payload: err.response.data.message,
+      payload: err.response?.data.message,
     });
   }
 };
@@ -40,7 +40,7 @@ export const loadSeller = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: "loadSellerFailure",
-      payload: err.response.data.message,
+      payload: err.response?.data.message,
     });
   }
 };
@@ -74,7 +74,7 @@ export const updateUserInformation =
     } catch (err) {
       dispatch({
         type: "updateUserInfoFail",
-        payload: err.response.data.message,
+        payload: err.response?.data.message,
       });
     }
   };
@@ -87,7 +87,7 @@ export const updateUserAddress =
       dispatch({
         type: "updateUserAddressRequest",
       });
-      const { data } = axios.put(
+      const { data } = await axios.put(
         `${server}/user/update-user-addresses`,
         {
           country,
@@ -135,7 +135,7 @@ export const deleteUserAddress = (id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: "deleteUserAddressFail",
-      payload: err.response.data.message,
+      payload: err.response?.data.message,
     });
   }
 };
@@ -158,7 +158,7 @@ export const getAllUsers = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllUsersFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data.message,
     });
   }
 };

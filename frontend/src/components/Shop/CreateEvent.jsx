@@ -49,6 +49,9 @@ const CreateEvent = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch({
+        type: 'clearErrors',
+      })
     }
     if (success) {
       toast.success("Sự kiện đã được tạo thành công!");
@@ -94,7 +97,7 @@ const CreateEvent = () => {
       images,
       shopId: seller._id,
       start_Date: startDate?.toISOString(),
-      Finish_Date: endDate?.toISOString(),
+      finish_Date: endDate?.toISOString(),
     };
     dispatch(createEvent(data));
   };
@@ -116,7 +119,7 @@ const CreateEvent = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm"
-            placeholder="Nhập tên sự kiện của sản phẩm..."
+            placeholder="Nhập tên sản phẩm có trong sự kiện..."
           />
         </div>
         <br />
@@ -126,7 +129,6 @@ const CreateEvent = () => {
           </label>
           <textarea
             cols="30"
-            required
             rows="8"
             type="text"
             name="description"
@@ -267,7 +269,7 @@ const CreateEvent = () => {
             {images &&
               images.map((i) => (
                 <img
-                  src={(i)}
+                  src={i}
                   key={i}
                   alt=""
                   className="h-[120px] w-[120px] object-cover m-2"

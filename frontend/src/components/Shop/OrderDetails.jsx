@@ -4,12 +4,12 @@ import { BsFillBagFill } from "react-icons/bs";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const OrderDetails = () => {
-  const { orders, isLoading } = useSelector((state) => state.order);
+  const { orders } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const [status, setStatus] = useState("");
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ const OrderDetails = () => {
       .then((res) => {
         toast.success("Đã cập nhật đơn hàng!");
         dispatch(getAllOrdersOfShop(seller._id));
+        navigate("/dashboard-orders");
       })
       .catch((err) => {
         toast.error(err.response.data.message);

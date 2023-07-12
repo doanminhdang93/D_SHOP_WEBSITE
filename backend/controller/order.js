@@ -79,6 +79,17 @@ router.get(
         createdAt: -1,
       });
 
+      // const DeliveredOrders = await Order.find({
+      //   "cart.shopId": req.params.shopId,
+      //   status: "Đã giao hàng",
+      // });
+      // const totalAvailableBalance =
+      //   DeliveredOrders.reduce((acc, item) => acc + item.totalPrice, 0) * 0.9;
+      // const seller = await Shop.findById(req.params.shopId);
+      // seller.availableBalance = totalAvailableBalance;
+
+      // await seller.save();
+
       res.status(200).json({
         success: true,
         orders,
@@ -100,7 +111,7 @@ router.put(
       if (!order) {
         return next(new ErrorHandler("Không tìm thấy đơn hàng này!", 400));
       }
-      if (req.body.status === "Đã bàn giao cho đơn vị vận chuyển") {
+      if (req.body.status !== "Đang xử lý") {
         order.cart.forEach(async (o) => {
           await updateOrder(o._id, o.qty);
         });
@@ -110,7 +121,7 @@ router.put(
 
       if (req.body.status === "Đã giao hàng") {
         order.deliveredAt = Date.now();
-        order.paymentInfo.status = "Succeeded";
+        order.paymentInfo.status = "Thành công";
         const serviceCharge = order.totalPrice * 0.1;
         await updateSellerInfo(order.totalPrice - serviceCharge);
       }
@@ -133,9 +144,7 @@ router.put(
 
       async function updateSellerInfo(amount) {
         const seller = await Shop.findById(req.seller.id);
-
-        seller.availableBalance = amount;
-
+        seller.availableBalance += amount;
         await seller.save();
       }
     } catch (error) {
@@ -195,6 +204,16 @@ router.put(
         order.cart.forEach(async (o) => {
           await updateOrder(o._id, o.qty);
         });
+        order.paymentInfo.status = "Chưa thanh toán do đã hoàn tiền";
+        await order.save();
+        const serviceCharge = order.totalPrice * 0.1;
+        await updateSellerInfo(order.totalPrice - serviceCharge);
+      }
+
+      async function updateSellerInfo(amount) {
+        const seller = await Shop.findById(req.seller.id);
+        seller.availableBalance -= amount;
+        await seller.save();
       }
 
       async function updateOrder(id, qty) {

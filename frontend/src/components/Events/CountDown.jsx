@@ -11,10 +11,10 @@ const CountDown = ({ data }) => {
     }, 1000);
 
     if (
-      typeof timeLeft.days === "undefined" &&
-      typeof timeLeft.hours === "undefined" &&
-      typeof timeLeft.minutes === "undefined" &&
-      typeof timeLeft.seconds === "undefined"
+      typeof timeLeft.days === 'undefined' &&
+      typeof timeLeft.hours === 'undefined' &&
+      typeof timeLeft.minutes === 'undefined' &&
+      typeof timeLeft.seconds === 'undefined'
     ) {
       axios.delete(`${server}/event/delete-shop-event/${data?._id}`);
     }
@@ -22,7 +22,7 @@ const CountDown = ({ data }) => {
   });
 
   function calculateTimeLeft() {
-    const difference = +new Date(data?.Finish_Date) - +new Date();
+    const difference = +new Date(data?.finish_Date) - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
@@ -54,7 +54,7 @@ const CountDown = ({ data }) => {
       {timerComponents.length ? (
         timerComponents
       ) : (
-        <span className="text-[red] text-[25px]">Đã hết hạn!</span>
+        <span className="text-[red] text-[25px]">Đã hết hạn</span>
       )}
     </div>
   );

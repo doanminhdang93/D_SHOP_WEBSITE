@@ -70,7 +70,7 @@ router.get("/get-all-events", async (req, res, next) => {
 
 // get all events of a shop
 router.get(
-  "/get-all-events/:id",
+  "/get-all-events-shop/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const events = await Event.find({ shopId: req.params.id });
@@ -90,20 +90,18 @@ router.delete(
   "/delete-shop-event/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const event = await Event.findById(req.params.id);
+      const eventData = await Event.findById(req.params.id);
 
-      if (!product) {
-        return next(new ErrorHandler("Không tìm thấy sản phẩm!", 404));
-      }    
-
-      for (let i = 0; 1 < product.images.length; i++) {
-        const result = await cloudinary.v2.uploader.destroy(
-          event.images[i].public_id
+      for (let i = 0; 1 < eventData.images.length; i++) {
+        await cloudinary.v2.uploader.destroy(
+          eventData.images[i].public_id
         );
       }
     
-      await event.remove();
-
+      const event = await Event.findByIdAndDelete(req.params.id);
+      if (!event) {
+        return next(new ErrorHandler("Không tìm thấy sự kiện nào!", 404));
+      }  
       res.status(201).json({
         success: true,
         message: "Xoá sự kiện thành công!",

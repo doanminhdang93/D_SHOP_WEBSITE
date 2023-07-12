@@ -8,6 +8,7 @@ import { server } from "../../server";
 import { toast } from "react-toastify";
 import { loadSeller } from "../../redux/actions/user";
 import { AiOutlineDelete } from "react-icons/ai";
+import { Country } from "country-state-city";
 
 const WithdrawMoney = () => {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ const WithdrawMoney = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const handleSubmit = async (e) => {
@@ -83,25 +84,27 @@ const WithdrawMoney = () => {
     toast.error("Số dư khả dụng không đủ!");
   };
 
+  const availableBalance = seller?.availableBalance.toFixed(2);
+  //console.log(availableBalance);
+
   const withdrawHandler = async () => {
+    //console.log(withdrawAmount);
     if (withdrawAmount < 50 || withdrawAmount > availableBalance) {
       toast.error("Bạn không thể rút tiền!");
-    } else {
-      const amount = withdrawAmount;
-      await axios
-        .post(
-          `${server}/withdraw/create-withdraw-request`,
-          { amount },
-          { withCredentials: true }
-        )
-        .then((res) => {
-          toast.success("Yêu cầu rút tiền đã được gửi đi thành công!");
-          dispatch(loadSeller());
-        });
     }
-  };
 
-  const availableBalance = seller?.availableBalance.toFixed(2);
+    const amount = withdrawAmount;
+    await axios
+      .post(
+        `${server}/withdraw/create-withdraw-request`,
+        { amount },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        toast.success("Yêu cầu rút tiền đã được gửi đi thành công!");
+        dispatch(loadSeller());
+      });
+  };
 
   return (
     <div className="w-full h-[90vh] p-8">
@@ -159,7 +162,32 @@ const WithdrawMoney = () => {
                     <label>
                       Quốc gia <span className="text-red-500">*</span>
                     </label>
-                    <input
+                    <select
+                      value={bankInfo.bankCountry}
+                      onChange={(e) =>
+                        setBankInfo({
+                          ...bankInfo,
+                          bankCountry: e.target.value,
+                        })
+                      }
+                      className="w-full border h-[40px] rounded-[5px]"
+                      required
+                    >
+                      <option value="" className="block pb-2">
+                        Chọn quốc gia
+                      </option>
+                      {Country &&
+                        Country.getAllCountries().map((item) => (
+                          <option
+                            className="block pb-2"
+                            key={item.isoCode}
+                            value={item.isoCode}
+                          >
+                            {item.name}
+                          </option>
+                        ))}
+                    </select>
+                    {/* <input
                       type="text"
                       name=""
                       required
@@ -173,7 +201,7 @@ const WithdrawMoney = () => {
                       }
                       placeholder="Nhập quốc gia!"
                       className={`${styles.input} mt-2`}
-                    />
+                    /> */}
                   </div>
 
                   <div className="pt-2">
@@ -261,12 +289,14 @@ const WithdrawMoney = () => {
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    className={`${styles.button} mb-3 text-white`}
-                  >
-                    Thêm
-                  </button>
+                  <div className="flex items-center justify-center">
+                    <button
+                      type="submit"
+                      className={`${styles.button} !w-[200px] mt-5 mb-3 text-white`}
+                    >
+                      Thêm
+                    </button>
+                  </div>
                 </form>
               </div>
             ) : (

@@ -4,22 +4,23 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require("path");
 
 app.use(
   cors({
     origin: "https://d-shop-website-client.vercel.app",
-    // origin: "http://localhost:3000",
+    //origin: "http://localhost:3000",
     credentials: true,
   })
 );
-app.use(express.json());
+
 app.use(cookieParser());
 // app.use("/", express.static(path.join(__dirname,"./uploads")));
-app.use("/test",(req, res) => {
+app.use("/test", (req, res) => {
   res.send("Hello world!");
-})
-app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+});
+
+app.use(bodyParser.json({ limit: "200mb" }));
+app.use(bodyParser.urlencoded({ limit: "200mb",  extended: true, parameterLimit: 1000000 }));
 
 //config
 if (process.env.NODE_ENV !== "PRODUCTION") {

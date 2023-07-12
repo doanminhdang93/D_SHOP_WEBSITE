@@ -44,8 +44,8 @@ router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
     try {
       await sendMail({
         email: seller.email,
-        subject: "Activate your Shop",
-        message: `Hello ${seller.name}, please click on the link to activate your shop: ${activationUrl}`,
+        subject: "Kích hoạt tài khoản shop",
+        message: `Xin chào ${seller.name}, vui lòng ấn vào đường link để kích hoạt tài khoản: ${activationUrl}`,
       });
       res.status(201).json({
         success: true,

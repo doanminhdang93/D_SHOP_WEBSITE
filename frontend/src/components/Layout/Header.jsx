@@ -13,7 +13,6 @@ import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown.jsx";
 import NavBar from "./NavBar.jsx";
 import { useSelector } from "react-redux";
-import { backend_url } from "../../server";
 import Cart from "../cart/Cart";
 import WishList from "../WishList/WishList";
 import { RxCross1 } from "react-icons/rx";

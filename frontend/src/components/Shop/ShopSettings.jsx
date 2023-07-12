@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { AiOutlineCamera } from "react-icons/ai";
 import styles from "../../styles/styles";
 import axios from "axios";
@@ -72,112 +72,107 @@ const ShopSettings = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center">
-      <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5">
-        <div className="w-full flex items-center justify-center">
-          <div className="relative">
-            <img
-              src={avatar ? avatar : `${seller.avatar?.url}`}
-              alt=""
-              className="w-[200px] h-[200px] rounded-full cursor-pointer"
+    <div className="w-full mt-2">
+      <div className="flex justify-center w-full">
+        <div className="relative">
+          <img
+            src={avatar ? avatar : `${seller.avatar?.url}`}
+            className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
+            alt=""
+          />
+          <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
+            <input
+              type="file"
+              id="image"
+              className="hidden"
+              onChange={handleImageChange}
             />
-            <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
-              <input
-                type="file"
-                id="image"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-              <label htmlFor="image" className="cursor-pointer">
-                <AiOutlineCamera></AiOutlineCamera>
-              </label>
-            </div>
+            <label htmlFor="image" className="cursor-pointer">
+              <AiOutlineCamera></AiOutlineCamera>
+            </label>
           </div>
         </div>
-
-        {/* shop info */}
-        <form className="flex flex-col items-center" onSubmit={updateHandler}>
-          <div className="w-[100%] 800px:w-[50%] mt-5 flex flex-col items-center">
-            <div className="w-full pl-[3%]">
+      </div>
+      <br></br>
+      <br></br>
+      <div className="w-full px-5">
+        <form onSubmit={updateHandler}>
+          <div className="w-full 800px:flex block pb-3">
+            <div className="800px:w-[50%] w-[100%]">
               <label className="block pb-2">Tên cửa hàng</label>
+              <input
+                type="name"
+                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                required
+                placeholder={`${seller.name}`}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              ></input>
             </div>
-            <input
-              type="name"
-              placeholder={`${seller.name}`}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-            />
-          </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5 flex flex-col items-center">
-            <div className="w-full pl-[3%]">
-              <label className="block pb-2">Mô tả cửa hàng</label>
-            </div>
-            <input
-              type="name"
-              placeholder={`${
-                seller?.description
-                  ? seller.description
-                  : "Nhập mô tả cửa hàng..."
-              }`}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-            />
-          </div>
-
-          <div className="w-[100%] 800px:w-[50%] mt-5 flex flex-col items-center">
-            <div className="w-full pl-[3%]">
+            <div className="800px:w-[50%] w-[100%]">
               <label className="block pb-2">Địa chỉ cửa hàng</label>
+              <input
+                type="name"
+                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                required
+                placeholder={`${seller?.address}`}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              ></input>
             </div>
-            <input
-              type="name"
-              placeholder={`${seller?.address}`}
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-            />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5 flex flex-col items-center">
-            <div className="w-full pl-[3%]">
+          <div className="w-full 800px:flex block pb-3">
+            <div className="800px:w-[50%] w-[100%]">
               <label className="block pb-2">Số điện thoại</label>
+              <input
+                type="text"
+                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                required
+                placeholder={`${seller?.phoneNumber}`}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              ></input>
             </div>
-            <input
-              type="name"
-              placeholder={`${seller?.phoneNumber}`}
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-            />
-          </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5 flex flex-col items-center">
-            <div className="w-full pl-[3%]">
+            <div className="800px:w-[50%] w-[100%]">
               <label className="block pb-2">Mã vùng</label>
+              <input
+                type="number"
+                placeholder={`${seller?.zipCode}`}
+                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                required
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+              ></input>
             </div>
-            <input
-              type="number"
-              placeholder={`${seller?.zipCode}`}
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-            />
           </div>
 
-          <div className="w-[100%] 800px:w-[50%] mt-5 flex flex-col items-center">
+          <div className="w-full 800px:flex justify-center items-center block pb-3">
+            <div className="800px:w-[50%] w-[100%]">
+              <label className="block pb-2">Mô tả cửa hàng</label>
+              <textarea
+                rows={3}
+                placeholder={`${
+                  seller?.description
+                    ? seller.description
+                    : "Nhập mô tả cửa hàng..."
+                }`}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              ></textarea>
+            </div>
+          </div>
+
+          <div className="flex justify-center items-center">
             <input
-              type="submit"
-              value="Cập nhật cửa hàng"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 cursor-pointer`}
+              className={`w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-3 cursor-pointer`}
               required
-              readOnly
-            />
+              value="Cập nhật"
+              type="submit"
+            ></input>
           </div>
         </form>
       </div>

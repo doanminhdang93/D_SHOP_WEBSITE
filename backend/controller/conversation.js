@@ -14,13 +14,7 @@ router.post(
 
       const isConversationExist = await Conversation.findOne({ groupTitle });
 
-      if (isConversationExist) {
-        const conversation = isConversationExist;
-        res.status(201).json({
-          success: true,
-          conversation,
-        });
-      } else {
+      if (!isConversationExist) {
         const conversation = await Conversation.create({
           members: [userId, sellerId],
           groupTitle: groupTitle,
@@ -30,6 +24,8 @@ router.post(
           success: true,
           conversation,
         });
+      } else{
+        return next(new ErrorHandler("Vui lòng vào tab trò chuyện để gửi tin nhắn cho shop!"), 400);
       }
     } catch (error) {
       return next(new ErrorHandler(error.response.message), 500);

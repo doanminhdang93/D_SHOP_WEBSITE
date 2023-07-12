@@ -5,6 +5,7 @@ import styles from '../styles/styles';
 import ProfileSideBar from '../components/Profile/ProfileSideBar';
 import ProfileContent from '../components/Profile/ProfileContent';
 import { useSelector } from 'react-redux';
+import Footer from '../components/Layout/Footer';
 
 const ProfilePage = () => {
   const { loading } = useSelector((state) => state.user);
@@ -23,6 +24,7 @@ const ProfilePage = () => {
               </div>
               <ProfileContent active={active} />
             </div>
+            <Footer></Footer>
           </>
         )}
       </div>

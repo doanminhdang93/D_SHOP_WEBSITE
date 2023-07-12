@@ -7,7 +7,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineMessage,
 } from "react-icons/ai";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
 import {
@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { addToCart } from "../../redux/actions/cart";
 import Ratings from "./Ratings";
 import axios from "axios";
+import { format } from "timeago.js";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
@@ -73,20 +74,20 @@ const ProductDetails = ({ data }) => {
       const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = data.shop._id;
-      axios
+      await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
           userId,
           sellerId,
         })
         .then((res) => {
-          navigate(`/conversation/${res.data.conversation._id}`);
+          navigate(`/inbox?${res.data.conversation._id}`);
         })
-        .catch((err) => {
-          toast.error(err.response?.data.message);
+        .catch((error) => {
+          toast.error(error.response.data.message);
         });
     } else {
-      toast.error("Vui lòng đăng nhập để tạo hội thoại!");
+      toast.error("Vui lòng đăng nhập để tạo cuộc hội thoại");
     }
   };
 
@@ -139,7 +140,7 @@ const ProductDetails = ({ data }) => {
                         <img
                           src={`${i?.url}`}
                           alt=""
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
+                          className="h-[150px] overflow-hidden mr-3 mt-3"
                           onClick={() => setSelect(index)}
                         ></img>
                       </div>
@@ -152,9 +153,13 @@ const ProductDetails = ({ data }) => {
                 </div>
               </div>
 
-              <div className="w-full 800px:w-[50%] pt-5">
+              <div className="w-full 800px:w-[50%] pl-5 pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                <p>{data.description}</p>
+                <p>
+                  {data.description.length > 1000
+                    ? data.description.slice(0, 1000) + "..."
+                    : data.description}
+                </p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
                     {data.discountPrice}$
@@ -325,7 +330,7 @@ const ProductDetailsInfo = ({
       {active === 2 ? (
         <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
           {data &&
-            data.reviews.map((item) => (
+            data?.reviews?.map((item) => (
               <div className="w-full flex my-2" key={item._id}>
                 <img
                   src={`${item.user.avatar?.url}`}
@@ -337,12 +342,16 @@ const ProductDetailsInfo = ({
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>
                     <Ratings rating={data?.ratings}></Ratings>
                   </div>
+
                   <p>{item.comment}</p>
+                  <p className="text-[#000000a7] text-[14px]">
+                    {format(item?.createdAt)}
+                  </p>
                 </div>
               </div>
             ))}
           <div className="w-full flex justify-center">
-            {data && data.reviews.length === 0 && <h5>Chưa có đánh giá!</h5>}
+            {data && data.reviews?.length === 0 && <h5>Chưa có đánh giá!</h5>}
           </div>
         </div>
       ) : null}

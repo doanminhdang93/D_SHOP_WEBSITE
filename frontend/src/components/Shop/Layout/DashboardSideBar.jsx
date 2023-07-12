@@ -17,7 +17,7 @@ const DashboardSideBar = ({active}) => {
                 <Link to='/dashboard' className='w-full flex items-center'>
                     <RxDashboard size={30} color={`${active === 1 ? "#88b816" : "#555"}`}></RxDashboard>
                     <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 1 ? "text-[#88b816]" : "text-[#555]"}`}>
-                        Dashboard
+                        Trang chủ
                     </h5>
                 </Link>
             </div>

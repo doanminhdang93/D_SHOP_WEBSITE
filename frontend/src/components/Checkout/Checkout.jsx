@@ -20,6 +20,7 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice,setDiscountPrice] = useState(null);
+  var shipping;
 
   const navigate = useNavigate();
 
@@ -59,7 +60,11 @@ const Checkout = () => {
   );
 
   // this is shipping cost
-  const shipping = subTotalPrice * 0.01;
+  if(subTotalPrice <= 1000){
+    shipping = subTotalPrice * 0.01;
+  }else{
+    shipping = 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -29,6 +29,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         console.log(err.response.data.message);
       });
   };
+
   return (
     <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
       <div
@@ -81,7 +82,9 @@ const ProfileSideBar = ({ active, setActive }) => {
 
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(4) || navigate("/inbox")}
+        onClick={() =>
+          setActive(4) || navigate("/inbox") 
+        }
       >
         <AiOutlineMessage
           size={20}

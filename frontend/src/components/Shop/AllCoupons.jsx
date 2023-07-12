@@ -80,7 +80,7 @@ const AllCoupons = () => {
     { field: "id", headerName: "ID", minWidth: 150, flex: 0.7 },
     {
       field: "name",
-      headerName: "mã giảm giá",
+      headerName: "Mã giảm giá",
       minWidth: 180,
       flex: 1.4,
     },
@@ -196,7 +196,7 @@ const AllCoupons = () => {
                       value={minAmount}
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       onChange={(e) => setMinAmount(e.target.value)}
-                      placeholder="Enter your coupon code min amount..."
+                      placeholder="Nhập số lượng tối thiểu..."
                     />
                   </div>
                   <br />
@@ -208,7 +208,7 @@ const AllCoupons = () => {
                       value={maxAmount}
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       onChange={(e) => setMaxAmount(e.target.value)}
-                      placeholder="Enter your coupon code max amount..."
+                      placeholder="Nhập số lượng tối đa..."
                     />
                   </div>
                   <br />
@@ -219,13 +219,13 @@ const AllCoupons = () => {
                       value={selectedProducts}
                       onChange={(e) => setSelectedProducts(e.target.value)}
                     >
-                      <option value="Choose your selected products">
+                      <option value="Chọn từ các sản phẩm của bạn">
                         Chọn sản phẩm
                       </option>
                       {products &&
                         products.map((i) => (
-                          <option value={i.name} key={i.name}>
-                            {i.name}
+                          <option value={i?.name} key={i.name}>
+                            {i?.name.slice(0,25)}
                           </option>
                         ))}
                     </select>

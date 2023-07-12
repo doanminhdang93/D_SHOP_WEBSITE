@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const conversationSchema = mongoose.Schema(
     {
-        groupTitles:{
+        groupTitle:{
             type: String,
         },
         members:{

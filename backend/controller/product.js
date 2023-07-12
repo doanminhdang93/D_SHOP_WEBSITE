@@ -29,7 +29,7 @@ router.post(
         const imagesLinks = [];
       
         for (let i = 0; i < images.length; i++) {
-          const result = await cloudinary.v2.uploader.upload(images[i], {
+          await cloudinary.v2.uploader.upload(images[i], {
             folder: "products",
           });
       
@@ -86,7 +86,7 @@ router.delete(
       }    
 
       for (let i = 0; 1 < product.images.length; i++) {
-        const result = await cloudinary.v2.uploader.destroy(
+        await cloudinary.v2.uploader.destroy(
           product.images[i].public_id
         );
       }

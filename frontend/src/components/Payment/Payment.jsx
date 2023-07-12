@@ -13,7 +13,6 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
-import { RxCross1 } from "react-icons/rx";
 
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
@@ -65,7 +64,7 @@ const Payment = () => {
         if (result.paymentIntent.status === "succeeded") {
           order.paymentInfo = {
             id: result.paymentIntent.id,
-            status: result.paymentIntent.status,
+            status: "Thành công",
             type: "Thẻ tín dụng",
           };
           await axios

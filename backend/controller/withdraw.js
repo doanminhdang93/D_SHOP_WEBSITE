@@ -35,11 +35,11 @@ router.post(
 
       const withdraw = await Withdraw.create(data);
 
-      const shop = await Shop.findById(req.seller._id);
+      // const shop = await Shop.findById(req.seller._id);
 
-      shop.availableBalance = shop.availableBalance - amount;
+      // shop.availableBalance = shop.availableBalance - amount;
 
-      await shop.save();
+      // await shop.save();
 
       res.status(201).json({
         success: true,
@@ -98,6 +98,7 @@ router.put(
       };
 
       seller.transactions = [...seller.transactions, transaction];
+      seller.availableBalance -= withdraw.amount;
 
       await seller.save();
 
