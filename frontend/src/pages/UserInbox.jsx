@@ -11,14 +11,8 @@ import { TfiGallery } from "react-icons/tfi";
 import styles from "../styles/styles";
 const ENDPOINT = "https://socket-d-shop.onrender.com/";
 //const ENDPOINT = "http://localhost:4000/";
-<<<<<<< HEAD
-const socketId = socketIO(
-  ENDPOINT,
-  { transports: ["websocket"] },
-);
-=======
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
->>>>>>> 9587fb26dd0af856c3ec1b1fb8858e4dd54599e3
+
 
 const UserInbox = () => {
   const { user } = useSelector((state) => state.user);
