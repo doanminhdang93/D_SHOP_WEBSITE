@@ -9,6 +9,7 @@ cửa hàng, thêm bình luận cho sản phẩm,...
 - Chỉnh sửa thông tin cá nhân, đổi mật khẩu, địa chỉ,...
 - Theo dõi đơn hàng.
 - Trò chuyện với người bán (socket.io).
+  
 Bên phía người bán(seller):
 - Đăng nhập, đăng ký (Khi người bán đăng ký tài khoản mới thì sẽ nhận được email để kích hoạt tài khoản), đăng xuất.
 - Xem số dư tài khoản, theo dõi tất cả đơn hàng đã được người dùng đặt. Yêu cầu rút tiền với admin.
@@ -16,6 +17,7 @@ Bên phía người bán(seller):
 - CRUD sự kiện, mã giảm giá, theo dõi tất cả sự kiện, mã giảm giá đã tạo.
 - Trò chuyện với người mua (socket.io).
 - Chỉnh sửa thông tin cửa hàng, thông tin cá nhân.
+
 Bên phía quản trị viên(admin):
 - Xem tất cả đơn hàng, sản phẩm, sự kiện.
 - Xem và có thể xoá người dùng, người bán.
