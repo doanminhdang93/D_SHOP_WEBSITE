@@ -17,8 +17,12 @@ app.use(cookieParser());
 // app.use("/", express.static(path.join(__dirname,"./uploads")));
 app.use("/test", (req, res) => {
   res.send("Hello world!");
+<<<<<<< HEAD
 });
 
+=======
+})
+>>>>>>> 9587fb26dd0af856c3ec1b1fb8858e4dd54599e3
 app.use(bodyParser.json({ limit: "200mb" }));
 app.use(bodyParser.urlencoded({ limit: "200mb",  extended: true, parameterLimit: 1000000 }));
 

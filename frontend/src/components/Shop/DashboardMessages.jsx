@@ -46,7 +46,11 @@ const DashboardMessages = () => {
   useEffect(() => {
     const getConversation = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
+=======
+        const resonse = await axios.get(
+>>>>>>> 9587fb26dd0af856c3ec1b1fb8858e4dd54599e3
           `${server}/conversation/get-all-conversations-seller/${seller?._id}`,
           {
             withCredentials: true,
