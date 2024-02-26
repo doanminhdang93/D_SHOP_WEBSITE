@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "../../styles/styles";
-import { AiOutlineArrowRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@material-ui/data-grid";
-import { Button } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfAdmin } from "../../redux/actions/order";
 import Loader from "../Layout/Loader";
@@ -99,7 +97,7 @@ const AdminDashboardMain = () => {
                 <h3
                   className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
                 >
-                  Tổng tiền kiếm được
+                  Doanh thu
                 </h3>
               </div>
               <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
@@ -113,7 +111,7 @@ const AdminDashboardMain = () => {
                 <h3
                   className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
                 >
-                  Tất cả người bán
+                  Số lượng người bán
                 </h3>
               </div>
               <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
@@ -130,7 +128,7 @@ const AdminDashboardMain = () => {
                 <h3
                   className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
                 >
-                  Tất cả đơn hàng
+                  Số lượng đơn hàng
                 </h3>
               </div>
               <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">

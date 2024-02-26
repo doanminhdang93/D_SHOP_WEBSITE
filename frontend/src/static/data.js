@@ -229,13 +229,14 @@ export const categoriesData = [
     title: "Đồ chơi",
     subTitle: "Do-choi",
     image_Url:
-    "https://img.upanh.tv/2023/05/19/do-choi-toystory-buzz-lightyear.jpg", 
+      "https://img.upanh.tv/2023/05/19/do-choi-toystory-buzz-lightyear.jpg",
   },
   {
     id: 7,
     title: "Chăm sóc thú cưng",
     subTitle: "Cham-soc-thu-cung",
-    image_Url: "https://cdn.openpr.com/T/c/Tc15444071_g.jpg",
+    image_Url:
+      "https://down-vn.img.susercontent.com/file/cdf21b1bf4bfff257efe29054ecea1ec_tn&quot",
   },
   {
     id: 8,
@@ -265,7 +266,7 @@ export const productData = [
   {
     id: 1,
     category: "Máy tính & Laptop",
-    categoryLink: 'May-tinh-Laptop',
+    categoryLink: "May-tinh-Laptop",
     name: "MacBook pro M2 chipset 256gb ssd 8gb ram 'space-gray' color with 1 year guarantee at Apple",
     description:
       "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
@@ -296,7 +297,7 @@ export const productData = [
   {
     id: 2,
     category: "Điện thoại & Tablet",
-    categoryLink: 'Dien-thoai-Tablet',
+    categoryLink: "Dien-thoai-Tablet",
     name: "Iphone 14 pro max 256 gb ssd and 8 gb ram silver color",
     description:
       "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",

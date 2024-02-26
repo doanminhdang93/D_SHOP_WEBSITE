@@ -109,7 +109,9 @@ router.post(
       const { email, password } = req.body;
 
       if (!email || !password) {
-        return next(new ErrorHandler("Vui lòng cung cấp thông tin chính xác!", 400));
+        return next(
+          new ErrorHandler("Vui lòng cung cấp thông tin chính xác!", 400)
+        );
       }
 
       const user = await User.findOne({ email }).select("+password");
@@ -261,7 +263,9 @@ router.put(
         (address) => address.addressType === req.body.addressType
       );
       if (sameTypeAddress) {
-        return next(new ErrorHandler(`${req.body.addressType} đã tồn tại!`,400));
+        return next(
+          new ErrorHandler(`${req.body.addressType} đã tồn tại!`, 400)
+        );
       }
 
       const existsAddress = user.addresses.find(
@@ -329,9 +333,7 @@ router.put(
       }
 
       if (req.body.newPassword !== req.body.confirmPassword) {
-        return next(
-          new ErrorHandler("Mật khẩu không đúng!", 400)
-        );
+        return next(new ErrorHandler("Mật khẩu không đúng!", 400));
       }
       user.password = req.body.newPassword;
 
@@ -394,9 +396,7 @@ router.delete(
       const user = await User.findById(req.params.id);
 
       if (!user) {
-        return next(
-          new ErrorHandler("Người dùng không đúng với ID này!", 400)
-        );
+        return next(new ErrorHandler("Người dùng không đúng với ID này!", 400));
       }
 
       const imageId = user.avatar.public_id;
@@ -404,10 +404,10 @@ router.delete(
       await cloudinary.v2.uploader.destroy(imageId);
 
       await User.findByIdAndDelete(req.params.id);
-    res.status(201).json({
-      success: true,
-      message: "Xoá người dùng thành công!"
-    })
+      res.status(201).json({
+        success: true,
+        message: "Xoá người dùng thành công!",
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

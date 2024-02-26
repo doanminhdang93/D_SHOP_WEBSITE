@@ -85,23 +85,21 @@ const WithdrawMoney = () => {
   };
 
   const availableBalance = seller?.availableBalance.toFixed(2);
-  //console.log(availableBalance);
 
   const withdrawHandler = async () => {
-    //console.log(withdrawAmount);
     if (withdrawAmount < 50 || withdrawAmount > availableBalance) {
-      toast.error("Bạn không thể rút tiền!");
+      toast.error("Số dư không đủ để rút tiền!");
     }
 
     const amount = withdrawAmount;
     await axios
       .post(
         `${server}/withdraw/create-withdraw-request`,
-        { amount },
+        { amount, sellerId: seller._id },
         { withCredentials: true }
       )
       .then((res) => {
-        toast.success("Yêu cầu rút tiền đã được gửi đi thành công!");
+        toast.success("Rút tiền thành công!");
         dispatch(loadSeller());
       });
   };

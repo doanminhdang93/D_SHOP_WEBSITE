@@ -10,54 +10,56 @@ const ErrorHandler = require("../ultils/ErrorHandler");
 const sendShopToken = require("../ultils/ShopToken");
 
 // create shop
-router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const sellerEmail = await Shop.findOne({ email });
-    if (sellerEmail) {
-      return next(new ErrorHandler("Người dùng đã tồn tại!", 400));
-    }
-
-    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: "avatars",
-    });
-
-
-    const seller = {
-      name: req.body.name,
-      email: email,
-      password: req.body.password,
-      avatar: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
-      address: req.body.address,
-      phoneNumber: req.body.phoneNumber,
-      zipCode: req.body.zipCode,
-    };
-
-    const activationToken = createActivationToken(seller);
-
-    const activationUrl = `https://d-shop-website-client.vercel.app/seller/activation/${activationToken}`;
-    //const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
-
+router.post(
+  "/create-shop",
+  catchAsyncErrors(async (req, res, next) => {
     try {
-      await sendMail({
-        email: seller.email,
-        subject: "Kích hoạt tài khoản shop",
-        message: `Xin chào ${seller.name}, vui lòng ấn vào đường link để kích hoạt tài khoản: ${activationUrl}`,
+      const { email } = req.body;
+      const sellerEmail = await Shop.findOne({ email });
+      if (sellerEmail) {
+        return next(new ErrorHandler("Người dùng đã tồn tại!", 400));
+      }
+
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
       });
-      res.status(201).json({
-        success: true,
-        message: `Vui lòng kiểm tra email của bạn:- ${seller.email} để kích hoạt tài khoản`,
-      });
+
+      const seller = {
+        name: req.body.name,
+        email: email,
+        password: req.body.password,
+        avatar: {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+        address: req.body.address,
+        phoneNumber: req.body.phoneNumber,
+        zipCode: req.body.zipCode,
+      };
+
+      const activationToken = createActivationToken(seller);
+
+      const activationUrl = `https://d-shop-website-client.vercel.app/seller/activation/${activationToken}`;
+      //const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
+
+      try {
+        await sendMail({
+          email: seller.email,
+          subject: "Kích hoạt tài khoản shop",
+          message: `Xin chào ${seller.name}, vui lòng ấn vào đường link để kích hoạt tài khoản: ${activationUrl}`,
+        });
+        res.status(201).json({
+          success: true,
+          message: `Vui lòng kiểm tra email của bạn:- ${seller.email} để kích hoạt tài khoản`,
+        });
+      } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+      }
     } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 400));
     }
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 400));
-  }
-}));
+  })
+);
 
 // create activation token
 const createActivationToken = (seller) => {
@@ -115,7 +117,9 @@ router.post(
       const { email, password } = req.body;
 
       if (!email || !password) {
-        return next(new ErrorHandler("Vui lòng cung cấp thông tin chính xác!", 400));
+        return next(
+          new ErrorHandler("Vui lòng cung cấp thông tin chính xác!", 400)
+        );
       }
 
       const user = await Shop.findOne({ email }).select("+password");
@@ -206,26 +210,25 @@ router.put(
     try {
       let existsSeller = await Shop.findById(req.seller._id);
 
-        const imageId = existsSeller.avatar.public_id;
+      const imageId = existsSeller.avatar.public_id;
 
-        await cloudinary.v2.uploader.destroy(imageId);
+      await cloudinary.v2.uploader.destroy(imageId);
 
-        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-          folder: "avatars",
-          width: 150,
-        });
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
+      });
 
-        existsSeller.avatar = {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        };
+      existsSeller.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
 
-  
       await existsSeller.save();
 
       res.status(200).json({
         success: true,
-        seller:existsSeller,
+        seller: existsSeller,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -295,9 +298,7 @@ router.delete(
       const seller = await Shop.findById(req.params.id);
 
       if (!seller) {
-        return next(
-          new ErrorHandler("Người bán không đúng với ID này!", 400)
-        );
+        return next(new ErrorHandler("Người bán không đúng với ID này!", 400));
       }
 
       await Shop.findByIdAndDelete(req.params.id);

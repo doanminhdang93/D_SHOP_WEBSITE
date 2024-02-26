@@ -263,7 +263,6 @@ const MessageList = ({
   setActiveStatus,
   isLoading,
 }) => {
-  console.log(data);
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
   const handleClick = (id) => {
@@ -316,7 +315,7 @@ const MessageList = ({
         <p className="text-[16px] text-[#000c]">
           {!isLoading && data?.lastMessageId !== user?._id
             ? "Bạn:"
-            : user?.name.split(" ")[0] + ": "}{" "}
+            : user?.name?.split(" ")[0] + ": "}{" "}
           {data?.lastMessage}
         </p>
       </div>

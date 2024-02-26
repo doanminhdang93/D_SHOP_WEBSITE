@@ -13,33 +13,35 @@ router.post(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { amount } = req.body;
+      const { amount, sellerId } = req.body;
+      console.log("sellerId", sellerId);
+
+      const seller = await Shop.findById(sellerId);
+      seller.availableBalance -= amount;
+
+      await seller.save();
 
       const data = {
         seller: req.seller,
         amount,
+        status: "Thành công",
+        updatedAt: Date.now(),
       };
 
-      try {
-        await sendMail({
-          email: req.seller.email,
-          subject: "Yêu cầu rút tiền",
-          message: `Xin chào ${req.seller.name}, Yêu cầu rút ${amount}$ của bạn đang được xử lý. Sẽ mất khoảng 3-7 ngày để xử lý!`,
-        });
-        res.status(201).json({
-          success: true,
-        });
-      } catch (error) {
-        return next(new ErrorHandler(error.message, 500));
-      }
+      // try {
+      //   await sendMail({
+      //     email: req.seller.email,
+      //     subject: "Yêu cầu rút tiền",
+      //     message: `Xin chào ${req.seller.name}, Yêu cầu rút ${amount}$ của bạn đang được xử lý. Sẽ mất khoảng 3-7 ngày để xử lý!`,
+      //   });
+      //   res.status(201).json({
+      //     success: true,
+      //   });
+      // } catch (error) {
+      //   return next(new ErrorHandler(error.message, 500));
+      // }
 
       const withdraw = await Withdraw.create(data);
-
-      // const shop = await Shop.findById(req.seller._id);
-
-      // shop.availableBalance = shop.availableBalance - amount;
-
-      // await shop.save();
 
       res.status(201).json({
         success: true,
@@ -102,19 +104,19 @@ router.put(
 
       await seller.save();
 
-      try {
-        await sendMail({
-          email: seller.email,
-          subject: "Xác nhận yêu cầu rút tiền",
-          message: `Xin chào ${seller.name}, Yêu cầu rút ${withdraw.amount}$ của bạn đang được tiến hành. Thời gian dự kiến giao dịch thànḣ công trong khoảng từ 3-7 ngày. Nếu có bất cứ thắc mắc gì xin vui lòng liên hệ chúng tôi qua email này! Xin cảm ơn!`,
-        });
-      } catch (error) {
-        return next(new ErrorHandler(error.message, 500));
-      }
-      res.status(201).json({
-        success: true,
-        withdraw,
-      });
+      // try {
+      //   await sendMail({
+      //     email: seller.email,
+      //     subject: "Xác nhận yêu cầu rút tiền",
+      //     message: `Xin chào ${seller.name}, Yêu cầu rút ${withdraw.amount}$ của bạn đang được tiến hành. Thời gian dự kiến giao dịch thànḣ công trong khoảng từ 3-7 ngày. Nếu có bất cứ thắc mắc gì xin vui lòng liên hệ chúng tôi qua email này! Xin cảm ơn!`,
+      //   });
+      // } catch (error) {
+      //   return next(new ErrorHandler(error.message, 500));
+      // }
+      // res.status(201).json({
+      //   success: true,
+      //   withdraw,
+      // });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

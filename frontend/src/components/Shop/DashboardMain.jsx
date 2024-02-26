@@ -116,18 +116,16 @@ const DashboardMain = () => {
 
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
-            <RiShoppingBag3Line
-              size={30}
-              className="mr-2"
-              
-            ></RiShoppingBag3Line>
+            <RiShoppingBag3Line size={30} className="mr-2"></RiShoppingBag3Line>
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Tất cả đơn hàng
+              Số lượng đơn hàng
             </h3>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{orders && orders.length}</h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
+            {orders && orders.length}
+          </h5>
           <Link to="/dashboard-orders">
             <h5 className="pt-4 pl-2 text-[#077f9c]">Xem đơn hàng</h5>
           </Link>
@@ -135,17 +133,16 @@ const DashboardMain = () => {
 
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
-            <BsBoxSeam
-              size={30}
-              className="mr-2"
-            ></BsBoxSeam>
+            <BsBoxSeam size={30} className="mr-2"></BsBoxSeam>
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Tất cả sản phẩm
+              Số lượng sản phẩm
             </h3>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{products && products.length}</h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
+            {products && products.length}
+          </h5>
           <Link to="/dashboard-products">
             <h5 className="pt-4 pl-2 text-[#077f9c]">Xem sản phẩm</h5>
           </Link>

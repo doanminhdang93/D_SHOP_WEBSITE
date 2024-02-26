@@ -19,7 +19,7 @@ const Checkout = () => {
   const [zipCode, setZipCode] = useState(null);
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
-  const [discountPrice,setDiscountPrice] = useState(null);
+  const [discountPrice, setDiscountPrice] = useState(null);
   var shipping;
 
   const navigate = useNavigate();
@@ -29,28 +29,34 @@ const Checkout = () => {
   }, []);
 
   const paymentSubmit = () => {
-    if(address1 === "" || address2 === "" || zipCode === null || country === "" || city === "") {
-        toast.error("Vui lòng chọn địa chỉ nhận hàng!");
-    }else{
-        const shippingAddress = {
-            address1,
-            address2,
-            zipCode,
-            country,
-            city,
-        }
-        const orderData = {
-            cart,
-            totalPrice,
-            subTotalPrice,
-            shipping,
-            discountPercentage,
-            shippingAddress,
-            user,
-        }
-        // update local storage with the updated orders data
-        localStorage.setItem('latestOrder',JSON.stringify(orderData));
-        navigate("/payment")
+    if (
+      address1 === "" ||
+      address2 === "" ||
+      zipCode === null ||
+      country === "" ||
+      city === ""
+    ) {
+      toast.error("Vui lòng chọn địa chỉ nhận hàng!");
+    } else {
+      const shippingAddress = {
+        address1,
+        address2,
+        zipCode,
+        country,
+        city,
+      };
+      const orderData = {
+        cart,
+        totalPrice,
+        subTotalPrice,
+        shipping,
+        discountPercentage,
+        shippingAddress,
+        user,
+      };
+      // update local storage with the updated orders data
+      localStorage.setItem("latestOrder", JSON.stringify(orderData));
+      navigate("/payment");
     }
   };
 
@@ -60,48 +66,48 @@ const Checkout = () => {
   );
 
   // this is shipping cost
-  if(subTotalPrice <= 1000){
+  if (subTotalPrice <= 1000) {
     shipping = subTotalPrice * 0.01;
-  }else{
+  } else {
     shipping = 0;
-  };
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = couponCode;
 
-    await axios.get(`${server}/coupon/get-coupon-value/${name}`).then((response) =>{
+    await axios
+      .get(`${server}/coupon/get-coupon-value/${name}`)
+      .then((response) => {
         const shopId = response.data.couponCode?.shopId;
         const couponCodeValue = response.data.couponCode?.value;
-        if(response.data.couponCode !== null) {
-            const isCouponValid = cart && cart.filter((item) => item.shopId === shopId);
-            if(isCouponValid.length === 0) {
-                toast.error("Mã giảm giá không hợp lệ với cửa hàng này!");
-                setCouponCode("");
-            }else{ 
-                const eligiblePrice = isCouponValid.reduce((acc, item) => acc + item.qty * item.discountPrice,0);
-                //console.log( eligiblePrice );
-                const discountPrice = (
-                    (eligiblePrice * couponCodeValue)/100
-                );
-                //console.log( discountPrice );
-                setDiscountPrice(discountPrice);
-                setCouponCodeData(response.data.couponCode);
-                setCouponCode("");
-            }
+        if (response.data.couponCode !== null) {
+          const isCouponValid =
+            cart && cart.filter((item) => item.shopId === shopId);
+          if (isCouponValid.length === 0) {
+            toast.error("Mã giảm giá không hợp lệ với cửa hàng này!");
+            setCouponCode("");
+          } else {
+            const eligiblePrice = isCouponValid.reduce(
+              (acc, item) => acc + item.qty * item.discountPrice,
+              0
+            );
+            const discountPrice = (eligiblePrice * couponCodeValue) / 100;
+            setDiscountPrice(discountPrice);
+            setCouponCodeData(response.data.couponCode);
+            setCouponCode("");
+          }
         }
-        if(response.data.couponCode === null){
-            toast.error("Mã giảm giá không tồn tại!");
+        if (response.data.couponCode === null) {
+          toast.error("Mã giảm giá không tồn tại!");
         }
         setCouponCode("");
-    });
+      });
   };
 
-  const discountPercentage = couponCodeData
-    ? discountPrice
-    : "";
+  const discountPercentage = couponCodeData ? discountPrice : "";
   const totalPrice = couponCodeData
-    ? (subTotalPrice + shipping - discountPercentage).toFixed(2) 
+    ? (subTotalPrice + shipping - discountPercentage).toFixed(2)
     : (subTotalPrice + shipping).toFixed(2);
 
   return (
