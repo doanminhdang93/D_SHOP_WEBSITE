@@ -12,7 +12,7 @@ cửa hàng, thêm bình luận cho sản phẩm,...
   
 Bên phía người bán(seller):
 - Đăng nhập, đăng ký (Khi người bán đăng ký tài khoản mới thì sẽ nhận được email để kích hoạt tài khoản), đăng xuất.
-- Xem số dư tài khoản, theo dõi tất cả đơn hàng đã được người dùng đặt. Yêu cầu rút tiền với admin.
+- Xem số dư tài khoản, theo dõi tất cả đơn hàng đã được người dùng đặt, rút tiền .
 - CRUD sản phẩm, theo dõi tất cả sản phẩm.
 - CRUD sự kiện, mã giảm giá, theo dõi tất cả sự kiện, mã giảm giá đã tạo.
 - Trò chuyện với người mua (socket.io).
