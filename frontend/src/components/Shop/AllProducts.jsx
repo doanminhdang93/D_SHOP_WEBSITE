@@ -6,9 +6,12 @@ import { Button } from "@material-ui/core";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import Loader from "../Layout/Loader";
 import { DataGrid } from "@material-ui/data-grid";
+import { toast } from "react-toastify";
 
 const AllProducts = () => {
-  const { products, isLoading } = useSelector((state) => state.products);
+  const { success, error, products, isLoading } = useSelector(
+    (state) => state.products
+  );
   const { seller } = useSelector((state) => state.seller);
 
   const dispatch = useDispatch();
@@ -17,12 +20,16 @@ const AllProducts = () => {
     dispatch(getAllProductsShop(seller._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-  //console.log(products);
 
   const handleDelete = (id) => {
-    //console.log(id);
     dispatch(deleteProduct(id));
-    window.location.reload();
+    if (error) {
+      console.log("error", error);
+      toast.error(error);
+    } else if (success) {
+      toast.success("Đã xoá sản phẩm thành công");
+      window.location.reload();
+    }
   };
 
   const columns = [
