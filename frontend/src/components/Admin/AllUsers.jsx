@@ -87,7 +87,7 @@ const AllUsers = () => {
   const usersNotAdmin = users && users.filter((user) => user.role === "user");
 
   usersNotAdmin &&
-  usersNotAdmin.forEach((item) => {
+    usersNotAdmin.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
@@ -100,7 +100,9 @@ const AllUsers = () => {
   return (
     <div className="w-full flex justify-center pt-5">
       <div className="w-[97%]">
-        <h3 className="text-[22px] font-Poppins pb-2">Tất cả người dùng</h3>
+        <h3 className="text-[22px] font-Poppins pb-2">
+          Tất cả người dùng (khách hàng)
+        </h3>
         <div className="w-full min-h-[45vh] bg-white rounded">
           <DataGrid
             rows={row}

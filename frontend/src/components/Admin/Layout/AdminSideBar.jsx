@@ -71,7 +71,7 @@ const AdminSideBar = ({ active }) => {
               active === 4 ? "text-[#88b816]" : "text-[#555]"
             }`}
           >
-            Danh sách người dùng
+            Danh sách khách hàng
           </h5>
         </Link>
       </div>
@@ -108,7 +108,7 @@ const AdminSideBar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
+      {/* <div className="w-full flex items-center p-4">
         <Link to="/admin-withdraw-request" className="w-full flex items-center">
           <CiMoneyBill
             size={30}
@@ -122,7 +122,7 @@ const AdminSideBar = ({ active }) => {
             Yêu cầu rút tiền
           </h5>
         </Link>
-      </div>
+      </div> */}
 
       <div className="w-full flex items-center p-4">
         <Link to="/profile" className="w-full flex items-center">
