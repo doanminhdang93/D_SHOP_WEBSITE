@@ -9,7 +9,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import { toast } from "react-toastify";
 
 const AllProducts = () => {
-  const { success, error, products, isLoading } = useSelector(
+  const { error, products, isLoading } = useSelector(
     (state) => state.products
   );
   const { seller } = useSelector((state) => state.seller);
@@ -28,10 +28,8 @@ const AllProducts = () => {
       toast.error(error);
       return;
     }  
-    if (success) {
-      toast.success("Đã xoá sản phẩm thành công");
-      window.location.reload();
-    }
+    toast.success("Đã xoá sản phẩm thành công");
+    window.location.reload();
   };
 
   const columns = [
