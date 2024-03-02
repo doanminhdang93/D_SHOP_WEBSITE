@@ -26,7 +26,9 @@ const AllProducts = () => {
     if (error) {
       console.log("error", error);
       toast.error(error);
-    } else if (success) {
+      return;
+    }  
+    if (success) {
       toast.success("Đã xoá sản phẩm thành công");
       window.location.reload();
     }
