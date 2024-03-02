@@ -27,7 +27,7 @@ const AllProducts = () => {
       console.log("error", error);
       toast.error(error);
       return;
-    }  
+    }
     if (success) {
       toast.success("Đã xoá sản phẩm thành công");
       window.location.reload();
@@ -99,7 +99,7 @@ const AllProducts = () => {
         name: product.name,
         price: "$" + product.discountPrice,
         stock: product.stock,
-        sold: 10,
+        sold: product.sold_out,
       });
     });
 
